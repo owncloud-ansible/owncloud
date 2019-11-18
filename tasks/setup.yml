@@ -1,0 +1,160 @@
+---
+- block:
+    - name: Enable maintainance mode
+      command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --on"
+      when:
+        - ansible_local.owncloud.installed | bool
+        - __occ_bin_link.stat.exists
+        - __occ_bin_src.stat.exists
+      become: True
+      become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+    - name: Create temp directory
+      file:
+        path: /tmp/owncloud_src
+        state: directory
+        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        group: "{{ owncloud_app_group }}"
+        mode: 0750
+  when: owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
+
+- block:
+    - name: Download ownCloud Release '{{ owncloud_version }}'
+      get_url:
+        url: "{{ __owncloud_download_url }}"
+        url_username: "{{ owncloud_download_auth_user | default(omit) }}"
+        url_password: "{{ owncloud_download_auth_password | default(omit) }}"
+        dest: "/tmp/{{ __owncloud_download_filename }}"
+        checksum: "{{ __owncloud_checksum_algorithm }}:{{ __owncloud_download_url }}.{{ __owncloud_checksum_algorithm }}"
+        mode: 0644
+
+    - name: Unpack the application archive
+      unarchive:
+        remote_src: True
+        src: "/tmp/{{ __owncloud_download_filename }}"
+        dest: /tmp/owncloud_src
+        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        group: "{{ owncloud_app_group }}"
+        extra_opts: [--strip-components=1]
+  when:
+    - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
+    - not owncloud_install_from_filesystem | bool
+
+- block:
+    - name: Copy install source to remote host
+      copy:
+        src: "{{ __owncloud_download_url }}"
+        dest: "/tmp/{{ __owncloud_offline_filename }}"
+        mode: 0644
+
+    - name: Unpack the application archive (offline)
+      unarchive:
+        remote_src: yes
+        src: "/tmp/{{ __owncloud_offline_filename }}"
+        dest: /tmp/owncloud_src
+        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        group: "{{ owncloud_app_group }}"
+        extra_opts:
+          - '--strip-components=1'
+  when:
+    - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
+    - owncloud_install_from_filesystem | bool
+
+- block:
+    - name: Sync files to deployment root
+      synchronize:
+        src: /tmp/owncloud_src/
+        dest: "{{ owncloud_deploy_path }}"
+        archive: yes
+        owner: yes
+        group: yes
+        delete: yes
+        recursive: yes
+      delegate_to: "{{ inventory_hostname }}"
+
+    - name: Remove default config folder
+      file:
+        path: "{{ owncloud_deploy_path }}/config"
+        state: absent
+      when: not (owncloud_config_path | dirname) == owncloud_deploy_path
+
+    - name: Create symlinks for custom src dirs
+      file:
+        src: "{{ item }}"
+        dest: "{{ owncloud_deploy_path }}/{{ item | basename }}"
+        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        group: "{{ owncloud_app_group }}"
+        state: link
+      loop:
+        - "{{ owncloud_data_path }}"
+        - "{{ __owncloud_custom_apps_path }}"
+        - "{{ owncloud_config_path }}"
+      when: not (item | dirname) == owncloud_deploy_path
+
+    - name: Cleanup temp files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /tmp/owncloud_src
+        - /tmp/owncloud.asc
+        - "/tmp/{{ __owncloud_download_filename }}"
+        - "/tmp/{{ __owncloud_download_filename }}.asc"
+        - "/tmp/{{ __owncloud_offline_filename }}"
+  when: owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
+
+- name: Install ownCloud config file
+  template:
+    src: var/www/owncloud/config/custom.config.php.j2
+    dest: "{{ owncloud_deploy_path }}/config/user.config.php"
+    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    group: "{{ owncloud_app_group }}"
+    mode: 0644
+    validate: "{{ php_executable | default(__php_executable) }} -f %s"
+
+- name: Get ownCloud setup status
+  command: "{{ owncloud_occ_executable | quote }} check"
+  register: __owncloud_register_occ_check
+  changed_when: False
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- name: Determine if ownCloud autosetup should be done
+  set_fact:
+    owncloud_do_autosetup: '{{ (owncloud_autosetup and
+                                 owncloud_admin_username is defined and
+                                 (not __owncloud_register_occ_check is skipped) and
+                                 "is not installed" in __owncloud_register_occ_check.stdout) }}'
+
+- name: Automatically finish setup via the occ tool
+  register: __owncloud_register_occ_install
+  when: owncloud_do_autosetup | bool
+  command: |
+    {{ owncloud_occ_executable | quote }} maintenance:install
+    "--data-dir={{ owncloud_data_path }}"
+    "--database={{ owncloud_db_type }}"
+    "--database-host={{ owncloud_db_host }}"
+    {% if owncloud_db_type in ['mysql', 'pgsql'] %}
+    "--database-name={{ owncloud_db_name }}"
+    "--database-user={{ owncloud_db_user }}"
+    "--database-pass={{ owncloud_db_password }}"
+    "--database-table-prefix={{ owncloud_db_tableprefix }}"
+    {% endif %}
+    {% if owncloud_admin_username %}
+    "--admin-user={{ owncloud_admin_username }}"
+    "--admin-pass={{ owncloud_admin_password }}"
+    {% endif %}
+  run_once: True
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- block:
+    - name: Automatically finish upgrade via the occ tool
+      command: "{{ owncloud_occ_executable | quote }} upgrade --no-interaction{{ '' if (owncloud_upgrade_migration_test | bool) else ' --skip-migration-test' }}{{ '' if (owncloud_upgrade_3party_app_disable | bool) else ' --no-app-disable' }}"
+      register: __owncloud_register_occ_install
+  when:
+    - not owncloud_do_autosetup | bool
+    - not owncloud_current_version is version_compare("0.0.0", operator="=", strict=True)
+    - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"

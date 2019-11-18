@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    owncloud_trusted_domains:
+      - "{{ owncloud_fqdn }}"
+      - "{{ ansible_default_ipv4.address }}"
+
+  roles:
+    - role: mariadb
+    - role: redis
+    - role: apache
+    - role: php
+    - role: owncloud

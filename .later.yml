@@ -1,0 +1,10 @@
+---
+logging:
+  level: error
+
+rules:
+  exclude_files:
+    - molecule/
+    - ansible/roles/*/templates/*.j2
+
+...

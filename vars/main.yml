@@ -1,0 +1,336 @@
+---
+__owncloud_download_url: "{{ owncloud_download_url | default('https://download.owncloud.org/community/owncloud-' + owncloud_version + '.tar.bz2') }}"
+__owncloud_download_filename: "{{ __owncloud_download_url | urlsplit('path') | basename }}"
+__owncloud_offline_filename: "{{ __owncloud_download_url | basename }}"
+__owncloud_checksum_algorithm: "{{ owncloud_checksum_algorithm | default('sha256') }}"
+__owncloud_gpg_pubkey_url: https://owncloud.org/owncloud.asc
+
+__owncloud_packages:
+  - tar
+  - unzip
+  - bzip2
+  - rsync
+  - gnupg2
+
+__owncloud_enable_sebooleans:
+  - httpd_can_network_connect_db
+  - httpd_can_network_connect
+  - httpd_execmem
+
+__owncloud_custom_apps_path: "{{ owncloud_src_path }}/custom"
+
+__owncloud_role_config:
+  trusted_domains: "{{ owncloud_trusted_domains }}"
+  'overwrite.cli.url': "{{ owncloud_overwrite_cli_url | default(owncloud_fqdn) }}"
+
+  'cors.allowed-domains':
+    state: '{{ "present" if owncloud_cors_allowed_domains else "absent" }}'
+    value: "{{ owncloud_cors_allowed_domains }}"
+
+  "memcache.local":
+    state: '{{ "present" if (owncloud_apcu_enabled | bool) else "absent" }}'
+    value: '\\OC\\Memcache\\APCu'
+
+  "memcache.locking":
+    state: '{{ "present" if (owncloud_redis_enabled | bool) else "absent" }}'
+    value: '\\OC\\Memcache\\Redis'
+
+  "redis":
+    state: '{{ "present" if (owncloud_redis_enabled | bool) else "absent" }}'
+    value:
+      host: "{{ owncloud_redis_host }}"
+      port: "{{ owncloud_redis_port | int }}"
+
+  "tempdirectory":
+    state: '{{ "present" if (owncloud_temp_path is defined) else "absent" }}'
+    value: "{{ owncloud_temp_path | default('') }}"
+
+  "apps_paths":
+    state: "present"
+    value:
+      - path: "{{ owncloud_deploy_path }}/apps"
+        url: "/apps"
+        writable: False
+      - path: "{{ owncloud_deploy_path }}/{{ __owncloud_custom_apps_path | basename }}"
+        url: "/{{ __owncloud_custom_apps_path | basename }}"
+        writable: True
+
+  "license-key":
+    state: '{{ "present" if owncloud_enterprise_license_key is defined else "absent" }}'
+    value: '{{ owncloud_enterprise_license_key | default("") }}'
+
+  default_language: '{{ owncloud_web_default_language }}'
+
+  log_type: "{{ owncloud_log_type }}"
+  logfile: "{{ owncloud_log_file }}"
+  logtimezone: "{{ owncloud_log_timezone }}"
+  loglevel: "{{ owncloud_log_level }}"
+  logdateformat: "{{ owncloud_log_dateformat }}"
+  cron_log: "{{ owncloud_log_cron }}"
+  log_rotate_size: "{{ owncloud_log_rotate_size }}"
+  syslog_tag: "{{ owncloud_syslog_tag }}"
+  "log.syslog.format": "{{ owncloud_syslog_log_format }}"
+
+  "version.hide": "{{ owncloud_version_hide }}"
+  show_server_hostname: "{{ owncloud_show_server_hostname }}"
+  knowledgebaseenabled: "{{ owncloud_knowledgebase_enabled }}"
+  enable_avatars: "{{ owncloud_enable_avatars }}"
+  allow_user_to_change_display_name: "{{ owncloud_allow_user_to_change_display_name }}"
+  defaultapp: "{{ owncloud_default_app }}"
+  "accounts.enable_medial_search": "{{ owncloud_medial_search_accounts_enabled }}"
+  "user.search_min_length": "{{ owncloud_search_min_length }}"
+
+  'integrity.ignore.missing.app.signature':
+    state: '{{ "present" if owncloud_integrity_ignore_missing_app_signature else "absent" }}'
+    value: "{{ owncloud_integrity_ignore_missing_app_signature }}"
+
+  remember_login_cookie_lifetime: "{{ owncloud_remember_login_cookie_lifetime }}"
+  session_lifetime: "{{ owncloud_session_lifetime }}"
+  session_keepalive: "{{ owncloud_session_keepalive_enabled }}"
+  token_auth_enforced: "{{ owncloud_token_auth_enforced }}"
+
+  "login.alternatives":
+    state: '{{ "present" if owncloud_login_alternatives else "absent" }}'
+    value: "{{ owncloud_login_alternatives }}"
+
+  'csrf.disabled': "{{ not owncloud_csrf_enabled }}"
+
+  skeletondirectory: "{{ owncloud_skeleton_path }}"
+
+__occ_core_config:
+  - name: core
+    attr: backgroundjobs_mode
+    value: "{{ owncloud_cron_backend }}"
+  - name: core
+    attr: OC_Channel
+    value: "{{ owncloud_release_channel }}"
+  - name: core
+    attr: "legal.imprint_url"
+    value: "{{ owncloud_imprint_url | default('') }}"
+    state: "{{ 'present' if owncloud_imprint_url is defined else 'absent' }}"
+  - name: core
+    attr: "legal.privacy_policy_url"
+    value: "{{ owncloud_privacy_policy_url | default('') }}"
+    state: "{{ 'present' if owncloud_privacy_policy_url is defined else 'absent' }}"
+  - name: core
+    attr: "shareapi_enabled"
+    value: "{{ 'yes' if owncloud_share_api_enabled | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_allow_links"
+    value: "{{ 'yes' if owncloud_share_api_allow_links | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_allow_public_upload"
+    value: "{{ 'yes' if owncloud_share_api_allow_public_upload | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_enforce_links_password_read_only"
+    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_read_only | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_enforce_links_password_read_write"
+    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_read_write | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_enforce_links_password_write_only"
+    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_write_only | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_default_expire_date"
+    value: "{{ 'yes' if owncloud_share_api_default_expire_date | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_enforce_expire_date"
+    value: "{{ 'yes' if owncloud_share_api_enforce_expire_date | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_expire_after_n_days"
+    value: "{{ owncloud_share_api_expire_after_n_days }}"
+  - name: core
+    attr: "shareapi_allow_public_notification"
+    value: "{{ 'yes' if owncloud_share_api_allow_public_notification | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_public_notification_lang"
+    value: "{{ owncloud_share_api_public_notification_language | default('') }}"
+    state: "{{ 'present' if owncloud_share_api_public_notification_language is defined else 'absent' }}"
+  - name: core
+    attr: "shareapi_allow_social_share"
+    value: "{{ 'yes' if owncloud_share_api_allow_social_share | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_auto_accept_share"
+    value: "{{ 'yes' if owncloud_share_api_auto_accept_share | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_allow_resharing"
+    value: "{{ 'yes' if owncloud_share_api_allow_resharing | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_allow_group_sharing"
+    value: "{{ 'yes' if owncloud_share_api_allow_group_sharing | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_only_share_with_group_members"
+    value: "{{ 'yes' if owncloud_share_api_only_share_with_group_members | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_only_share_with_membership_groups"
+    value: "{{ 'yes' if owncloud_share_api_only_share_with_membership_groups | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_allow_mail_notification"
+    value: "{{ 'yes' if owncloud_share_api_allow_mail_notification | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_allow_share_dialog_user_enumeration"
+    value: "{{ 'yes' if owncloud_share_api_allow_share_dialog_user_enumeration | bool else 'no' }}"
+  - name: core
+    attr: "shareapi_share_dialog_user_enumeration_group_members"
+    value: "{{ 'yes' if owncloud_share_api_share_dialog_user_enumeration_group_members | bool else 'no' }}"
+  - name: federation
+    attr: "autoAddServers"
+    value: "{{ '1' if owncloud_federation_auto_add_servers | bool else '0' }}"
+  - name: federatedfilesharing
+    attr: "auto_accept_trusted"
+    value: "{{ 'yes' if owncloud_federation_auto_accept_trusted | bool else 'no' }}"
+  - name: files_sharing
+    attr: "outgoing_server2server_share_enabled"
+    value: "{{ 'yes' if owncloud_federation_allow_outgoing_server2server_share | bool else 'no' }}"
+  - name: files_sharing
+    attr: "incoming_server2server_share_enabled"
+    value: "{{ 'yes' if owncloud_federation_allow_incoming_server2server_share | bool else 'no' }}"
+  - name: system
+    attr: mail_domain
+    value: "{{ owncloud_mail_domain | default('') }}"
+    state: '{{ "present" if owncloud_mail_domain is defined else "absent" }}'
+  - name: system
+    attr: mail_from_address
+    value: "{{ owncloud_mail_from_address | default('') }}"
+    state: '{{ "present" if owncloud_mail_from_address is defined else "absent" }}'
+  - name: system
+    attr: mail_smtpmode
+    value: "{{ owncloud_mail_smtp_mode | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_mode is defined else "absent" }}'
+  - name: system
+    attr: mail_smtphost
+    value: "{{ owncloud_mail_smtp_host | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_host is defined else "absent" }}'
+  - name: system
+    attr: mail_smtpport
+    value: "{{ owncloud_mail_smtp_port | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_port is defined else "absent" }}'
+  - name: system
+    attr: mail_smtpsecure
+    value: "{{ owncloud_mail_smtp_secure | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_secure is defined else "absent" }}'
+  - name: system
+    attr: mail_smtpauth
+    value: "{{ '1' if owncloud_mail_smtp_auth_enabled else '' }}"
+    state: '{{ "present" if owncloud_mail_smtp_auth_enabled is defined else "absent" }}'
+  - name: system
+    attr: mail_smtpauthtype
+    value: "{{ owncloud_mail_smtp_auth_type | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_auth_type is defined else "absent" }}'
+  - name: system
+    attr: mail_smtpname
+    value: "{{ owncloud_mail_smtp_auth_name | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_auth_name is defined else "absent" }}'
+  - name: system
+    attr: mail_smtppassword
+    value: "{{ owncloud_mail_smtp_auth_password | default('') }}"
+    state: '{{ "present" if owncloud_mail_smtp_auth_password is defined else "absent" }}'
+  - name: password_policy
+    attr: spv_expiration_nopassword_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_link_nopassword_expiration is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_expiration_nopassword_value
+    value: "{{ owncloud_password_link_nopassword_expiration | default('') }}"
+    state: "{{ 'present' if owncloud_password_link_nopassword_expiration is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_expiration_password_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_link_expiration is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_expiration_password_value
+    value: "{{ owncloud_password_link_expiration | default('') }}"
+    state: "{{ 'present' if owncloud_password_link_expiration is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_password_history_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_history_blacklist is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_password_history_value
+    value: "{{ owncloud_password_history_blacklist | default('') }}"
+    state: "{{ 'present' if owncloud_password_history_blacklist is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_user_password_expiration_notification_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_expiration_notification is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_user_password_expiration_notification_value
+    value: "{{ owncloud_password_expiration_notification | default('') }}"
+    state: "{{ 'present' if owncloud_password_expiration_notification is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_user_password_expiration_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_expiration is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_user_password_expiration_value
+    value: "{{ owncloud_password_expiration | default('') }}"
+    state: "{{ 'present' if owncloud_password_expiration is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_user_password_force_change_on_first_login_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_force_change_on_first_login else 'absent' }}"
+  - name: password_policy
+    attr: spv_def_special_chars_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_allowed_special_chars is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_def_special_chars_value
+    value: "{{ owncloud_password_allowed_special_chars | default('') }}"
+    state: "{{ 'present' if owncloud_password_allowed_special_chars is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_lowercase_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_min_lowercase is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_lowercase_value
+    value: "{{ owncloud_password_min_lowercase | default('') }}"
+    state: "{{ 'present' if owncloud_password_min_lowercase is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_min_chars_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_min_lenght is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_min_chars_value
+    value: "{{ owncloud_password_min_lenght | default('') }}"
+    state: "{{ 'present' if owncloud_password_min_lenght is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_numbers_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_min_numbers is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_numbers_value
+    value: "{{ owncloud_password_min_numbers | default('') }}"
+    state: "{{ 'present' if owncloud_password_min_numbers is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_special_chars_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_min_special_chars is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_special_chars_value
+    value: "{{ owncloud_password_min_special_chars | default('') }}"
+    state: "{{ 'present' if owncloud_password_min_special_chars is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_uppercase_checked
+    value: "on"
+    state: "{{ 'present' if owncloud_password_min_uppercase is defined else 'absent' }}"
+  - name: password_policy
+    attr: spv_uppercase_value
+    value: "{{ owncloud_password_min_uppercase | default('') }}"
+    state: "{{ 'present' if owncloud_password_min_uppercase is defined else 'absent' }}"
+
+__owncloud_fs_perm_fix:
+  - path: "{{ owncloud_config_path }}/config.php"
+    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    group: "{{ owncloud_app_group }}"
+    mode: "0640"
+    state: file
+  - path: "{{ owncloud_deploy_path }}/apps-external"
+    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    group: "{{ owncloud_app_group }}"
+    mode: "0750"
+    state: directory
+  - path: "{{ owncloud_log_file }}"
+    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    group: "{{ owncloud_app_group }}"
+    mode: "0640"
+    state: file

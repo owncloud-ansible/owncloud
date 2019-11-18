@@ -1,0 +1,3 @@
+---
+__owncloud_python_executable: "python"
+__owncloud_app_user: "apache"

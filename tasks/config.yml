@@ -1,0 +1,28 @@
+---
+- name: Set misc core settings
+  oc_config:
+    name: "{{ item.name }}"
+    attribute: "{{ item.attr }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ __occ_core_config }}"
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- name: Setup system background jobs
+  cron:
+    name: "{{ item.name }}"
+    minute: "{{ item.minute | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    weekday: "{{ item.weekday | default('*') }}"
+    day: "{{ item.day | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+    user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    job: "{{ item.job }}"
+    cron_file: owncloud
+    state: "{{ 'present' if owncloud_cron_backend == 'cron' else 'absent' }}"
+  loop: "{{ owncloud_cron_jobs }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+...

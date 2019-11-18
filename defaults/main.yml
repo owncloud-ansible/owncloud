@@ -1,0 +1,207 @@
+---
+owncloud_version: "10.3.1"
+
+# @var owncloud_download_url: >
+# You can set a custom download url especialy for the enterprise version.
+# @end
+# @var owncloud_download_url:example: $ "https://example.com/oc-{{ owncloud_version }}.tar.gz"
+
+# owncloud_download_auth_user: # 
+
+# owncloud_download_auth_password: # defaults to not set
+
+owncloud_install_from_filesystem: False
+# owncloud_install_from_filesystem:example: >
+# owncloud_install_from_filesystem: True
+# owncloud_download_url: /tmp/owncloud-enterprise-complete-20190516.tar.bz2
+# @end
+
+owncloud_release_channel: production
+
+owncloud_packages_extra: []
+
+owncloud_autosetup: True
+owncloud_admin_username: admin
+owncloud_admin_password: owncloud
+
+owncloud_system_user: 'owncloud'
+owncloud_system_group: 'owncloud'
+owncloud_system_user_home: '/var/local/{{ owncloud_system_user }}'
+owncloud_system_user_shell: '/usr/sbin/nologin'
+owncloud_system_user_comment: 'Owncloud Application Manager'
+
+owncloud_app_group: "{{ owncloud_system_group }}"
+owncloud_occ_executable: /usr/local/bin/occ
+
+owncloud_fqdn: owncloud.example.com
+owncloud_trusted_domains:
+  - "{{ owncloud_fqdn }}"
+owncloud_cors_allowed_domains: []
+
+owncloud_apcu_enabled: True
+owncloud_redis_enabled: True
+owncloud_redis_host: "127.0.0.1"
+owncloud_redis_port: 6379
+
+owncloud_deploy_path: /var/www/owncloud
+owncloud_src_path: "/usr/local/src/{{ owncloud_system_user }}"
+owncloud_data_path: "{{ owncloud_src_path }}/data"
+owncloud_config_path: "{{ owncloud_src_path }}/config"
+owncloud_skeleton_path: "{{ owncloud_deploy_path }}/core/skeleton"
+
+# Define a custom temp folder for ownCloud
+# Don't set this to a system wide temp dir e.g. /tmp!!
+# While creating this directory ownership will be
+# limited to owncloud user/group
+# owncloud_temp_path: # defaults to not set
+
+owncloud_share_api_enabled: True
+owncloud_share_api_allow_links: True
+owncloud_share_api_allow_public_upload: True
+owncloud_share_api_enforce_password_links_read_only: False
+owncloud_share_api_enforce_password_links_read_write: False
+owncloud_share_api_enforce_password_links_write_only: False
+owncloud_share_api_default_expire_date: True
+owncloud_share_api_enforce_expire_date: False
+owncloud_share_api_expire_after_n_days: 7
+owncloud_share_api_allow_public_notification: False
+# owncloud_share_api_public_notification_language: en # defaults to not set
+owncloud_share_api_allow_social_share: True
+owncloud_share_api_auto_accept_share: False
+owncloud_share_api_allow_resharing: False
+owncloud_share_api_allow_group_sharing: False
+owncloud_share_api_only_share_with_group_members: True
+owncloud_share_api_only_share_with_membership_groups: True
+owncloud_share_api_allow_mail_notification: True
+owncloud_share_api_allow_share_dialog_user_enumeration: True
+owncloud_share_api_share_dialog_user_enumeration_group_members: False
+
+owncloud_federation_auto_add_servers: False
+owncloud_federation_auto_accept_trusted: False
+owncloud_federation_allow_outgoing_server2server_share: True
+owncloud_federation_allow_incoming_server2server_share: True
+
+# owncloud_mail_domain: example.com # defaults to not set
+# owncloud_mail_from_address: owncloud # defaults to not set
+# owncloud_mail_smtp_mode: smtp # defaults to not set
+# owncloud_mail_smtp_host: "smtp.example.com" # defaults to not set
+# owncloud_mail_smtp_port: "587" # defaults to not set
+# owncloud_mail_smtp_secure: ssl # defaults to not set
+owncloud_mail_smtp_auth_enabled: False
+# owncloud_mail_smtp_auth_type: "PLAIN" # defaults to not set
+# owncloud_mail_smtp_auth_name: admin@example.com # defaults to not set
+# owncloud_mail_smtp_auth_password: "very_secure" # defaults to not set
+
+# owncloud_password_min_lowercase:
+# owncloud_password_min_lenght:
+# owncloud_password_min_numbers:
+# owncloud_password_min_special_chars:
+# owncloud_password_allowed_special_chars:
+# owncloud_password_min_uppercase:
+# owncloud_password_link_nopassword_expiration: # (days)
+# owncloud_password_link_expiration: # (days)
+# owncloud_password_history_blacklist: # (number)
+# owncloud_password_expiration: # (days)
+# owncloud_password_expiration_notification: # (seconds)
+owncloud_password_force_change_on_first_login: False
+
+owncloud_log_type: owncloud
+owncloud_log_file: "{{ owncloud_data_path }}/owncloud.log"
+owncloud_log_level: 2
+owncloud_log_timezone: "Etc/UTC"
+owncloud_log_dateformat: "Y-m-d H:i:s.u"
+owncloud_log_cron: True
+owncloud_log_rotate_size: 0
+owncloud_syslog_tag: ownCloud
+owncloud_syslog_log_format: "[%reqId%][%remoteAddr%][%user%][%app%][%method%][%url%] %message%"
+
+owncloud_db_type: mysql
+owncloud_db_host: "localhost"
+owncloud_db_name: owncloud
+owncloud_db_user: owncloud
+owncloud_db_password: owncloud
+owncloud_db_tableprefix: oc_
+
+owncloud_version_hide: True
+owncloud_show_server_hostname: False
+owncloud_knowledgebase_enabled: True
+owncloud_enable_avatars: True
+owncloud_allow_user_to_change_display_name: True
+owncloud_web_default_language: "en_US"
+owncloud_default_app: files
+owncloud_medial_search_accounts_enabled: True
+owncloud_search_min_length: 3
+## List of apps to be ignored
+owncloud_integrity_ignore_missing_app_signature: []
+
+## Defaults to 15 days
+owncloud_remember_login_cookie_lifetime: 1296000
+## Default to 24 hours
+owncloud_session_lifetime: 86400
+## Enabling this sends a "heartbeat" to the server to keep it from timing out
+owncloud_session_keepalive_enabled: True
+## Enforces token only authentication for apps and clients connecting to ownCloud
+owncloud_token_auth_enforced: False
+
+# @var owncloud_login_alternatives:description: >
+# Allows to specify additional login buttons on the logon screen (e.g. SSO)
+# @end
+owncloud_login_alternatives: []
+
+# @var owncloud_csrf_enabled:description: >
+# Be careful!
+# See https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html#disable-ownclouds-built-in-csrf-protection-mechanism
+# @end
+owncloud_csrf_enabled: True
+
+# @var owncloud_config_extra:description: >
+# For availabe configuration options see:
+# https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html
+# @end
+owncloud_config_extra: {}
+
+owncloud_upgrade_migration_test: True
+owncloud_upgrade_3party_app_disable: True
+
+# @var owncloud_cron_backend:description: >
+# Possible values are `webcron|cron|ajax`.
+# See: https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs
+owncloud_cron_backend: cron
+
+# @var owncloud_cron_jobs:description: >
+# Will be applied only if owncloud_cron_backend is 'cron'
+# @end
+owncloud_cron_jobs:
+  - name: oc cron.php
+    job: "{{ php_executable | default(__php_executable) }} -f {{ owncloud_deploy_path }}/cron.php"
+    minute: '*/15'
+
+# owncloud_imprint_url: example.com/impressum # defaults to not set
+# owncloud_privacy_policy_url: example.com/impressum # defaults to not set
+
+# @var owncloud_apps:example: >
+# owncloud_apps:
+#   - name: contacts
+#   - name: http://market.owncloud.local/carnet-0.16.2.tar.gz
+#     from_url: yes
+#     url_username: my_user
+#     url_password:my_password
+#     force_basic_auth: true
+#     state: present
+# @end
+
+owncloud_apps:
+  - name: twofactor_totp
+  - name: gallery
+  - name: password_policy
+
+owncloud_app_documents_provider: onlyoffice
+owncloud_app_documents_enabled: False
+
+owncloud_apps_config: []
+
+# @var owncloud_encryption_enabled:description: >
+# Only supported for ownCloud >= 10.2.1
+# @end
+owncloud_encryption_enabled: False
+owncloud_encryption_force_encrypt_all: False

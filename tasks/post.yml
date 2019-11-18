@@ -1,0 +1,32 @@
+---
+- name: Check ownCloud core integrity
+  command: "{{ owncloud_occ_executable | quote }} integrity:check-core"
+  register: owncloud_register_occ_integrity_check_core
+  failed_when: (owncloud_register_occ_integrity_check_core.stdout_lines | length != 0)
+  changed_when: False
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- name: Disable maintainance mode
+  command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --off"
+  changed_when: False
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- name: Ensure correct file permissions
+  file:
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ __owncloud_fs_perm_fix }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Gather facts
+  action: setup
+
+- name: Register current ownCloud version
+  set_fact:
+    owncloud_current_version: "{{ ansible_local.owncloud.version }}"

@@ -1,0 +1,62 @@
+---
+- block:
+    - name: Install ownCloud apps
+      oc_app:
+        name: "{{ item.name }}"
+        state: "{{ item.state | default('present') }}"
+        enabled: "{{ item.enabled | default('yes') }}"
+        from_url: "{{ item.from_url | default('no') }}"
+        executable: "{{ owncloud_occ_executable | default(omit) }}"
+      loop: "{{ owncloud_apps }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Set ownCloud app config attributes
+      loop: "{{ owncloud_apps_config | subelements('parameters') }}"
+      loop_control:
+        label: "{{ item.0.name }} - {{ item.1.attribute }}:{{ item.1.value }}"
+      oc_config:
+        name: "{{ item.0.name }}"
+        attribute: "{{ item.1.attribute }}"
+        value: "{{ item.1.value }}"
+        state: "{{ item.1.state | default(omit) }}"
+        update_only: "{{ item.1.update_only | default(omit) }}"
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- name: Get current encryption state
+  command: "{{ owncloud_occ_executable | quote }} encryption:status --output json"
+  changed_when: False
+  register: __oc_encrypt
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+- block:
+    - name: Enable encryption app
+      command: "{{ owncloud_occ_executable | quote }} app:enable encryption"
+      changed_when: False
+
+    - name: Enable encryption
+      command: "{{ owncloud_occ_executable | quote }} encryption:enable"
+      register: __oc_encyrypt_enable
+      changed_when: "'Encryption enabled' in __oc_encyrypt_enable.stdout"
+
+    - name: Set masterkey encryption type
+      command: "{{ owncloud_occ_executable | quote }} encryption:select-encryption-type masterkey -y"
+      register: __oc_encyrypt_masterkey
+      changed_when: "'successfully enabled' in __oc_encyrypt_masterkey.stdout"
+      failed_when:
+        - not __oc_encyrypt_masterkey.rc == 0
+        - not "'already enabled' in __oc_encyrypt_masterkey.stdout"
+
+    - name: Encrypt filesystem
+      command: "{{ owncloud_occ_executable | quote }} encryption:encrypt-all -y"
+      when: not (__oc_encrypt.stdout | from_json).enabled or owncloud_encryption_force_encrypt_all | bool
+      changed_when: False
+  when:
+    - owncloud_current_version is version_compare("10.2.1", operator=">=", strict=True)
+    - owncloud_encryption_enabled | bool
+  become: True
+  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+
+...

@@ -1,0 +1,27 @@
+---
+- block:
+    - name: Set required selinux booleans
+      loop: "{{ owncloud_enable_sebooleans | default(__owncloud_enable_sebooleans) }}"
+      seboolean:
+        name: "{{ item }}"
+        state: yes
+        persistent: yes
+
+    - name: Set selinux file context mapping
+      loop:
+        - "{{ owncloud_data_path }}(/.*)?"
+        - "{{ __owncloud_custom_apps_path }}(/.*)?"
+        - "{{ owncloud_config_path }}(/.*)?"
+        - "{{ owncloud_deploy_path }}/.htaccess"
+      sefcontext:
+        target: "{{ item }}"
+        setype: httpd_sys_rw_content_t
+        state: present
+
+    - name: Apply new SELinux file context to filesystem
+      loop:
+        - "{{ owncloud_src_path }}"
+        - "{{ owncloud_deploy_path }}"
+      command: "restorecon -irv {{ item }}"
+      changed_when: False
+  when: ansible_selinux.status | default("disabled") == "enabled"
