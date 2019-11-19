@@ -1,4 +1,4 @@
-#!/usr/bin/env {{ owncloud_python_executable | default(__owncloud_python_executable) }}
+#!/usr/bin/env {{ owncloud_python_executable }}
 
 # {{ ansible_managed }}
 
@@ -15,7 +15,7 @@ output = loads('''{{ ({
 if os.path.isfile('{{ owncloud_deploy_path + "/config/config.php" }}'):
     try:
         config_cmd = subprocess.Popen(
-            ['{{ php_executable | default(__php_executable) }}', '-r', 'include "{{ owncloud_deploy_path + "/config/config.php" }}"; echo json_encode($CONFIG);'],
+            ['{{ php_executable }}', '-r', 'include "{{ owncloud_deploy_path + "/config/config.php" }}"; echo json_encode($CONFIG);'],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )

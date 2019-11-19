@@ -25,3 +25,5 @@
       command: "restorecon -irv {{ item }}"
       changed_when: False
   when: ansible_selinux.status | default("disabled") == "enabled"
+
+...

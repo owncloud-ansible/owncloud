@@ -5,13 +5,13 @@
   failed_when: (owncloud_register_occ_integrity_check_core.stdout_lines | length != 0)
   changed_when: False
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 - name: Disable maintainance mode
   command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --off"
   changed_when: False
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 - name: Ensure correct file permissions
   file:
@@ -30,3 +30,5 @@
 - name: Register current ownCloud version
   set_fact:
     owncloud_current_version: "{{ ansible_local.owncloud.version }}"
+
+...

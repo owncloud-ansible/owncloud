@@ -1,5 +1,5 @@
 #!/bin/bash
-# Shortcut for running ownClouds `occ` command when not logged in as {{ owncloud_app_user | default(__owncloud_app_user) }} user and sudo allows it.
+# Shortcut for running ownClouds `occ` command when not logged in as {{ owncloud_app_user }} user and sudo allows it.
 # https://doc.owncloud.org/server/9.0/admin_manual/configuration_server/occ_command.html
 
 # {{ ansible_managed }}
@@ -20,7 +20,7 @@ set -o nounset -o pipefail -o errexit
 cd '{{ owncloud_deploy_path }}' || exit 1
 
 # Long command line options seem to be not supported as of 1.8.3 in Ubuntu precise.
-# sudo --preserve-env --user '{{ owncloud_app_user | default(__owncloud_app_user) }}' {{ php_executable | default(__php_executable) }} --file '{{ owncloud_deploy_path }}/occ' "$@"
+# sudo --preserve-env --user '{{ owncloud_app_user }}' {{ php_executable }} --file '{{ owncloud_deploy_path }}/occ' "$@"
 # {#
 # Example cron entry:
 # - name: 'owncloud-some-job'
@@ -28,8 +28,8 @@ cd '{{ owncloud_deploy_path }}' || exit 1
 #   minute: 23
 #   hour: 05
 #   job: 'USER={{ owncloud_app_user | quote }} {{ some_script | quote }}'
-#   user: '{{ owncloud_app_user | default(__owncloud_app_user) }}'
+#   user: '{{ owncloud_app_user }}'
 #
 #}
 
-{{ php_executable | default(__php_executable) }} --file '{{ owncloud_deploy_path }}/occ' "$@"
+{{ php_executable }} --file '{{ owncloud_deploy_path }}/occ' "$@"

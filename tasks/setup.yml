@@ -7,13 +7,13 @@
         - __occ_bin_link.stat.exists
         - __occ_bin_src.stat.exists
       become: True
-      become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+      become_user: "{{ owncloud_app_user }}"
 
     - name: Create temp directory
       file:
         path: /tmp/owncloud_src
         state: directory
-        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        owner: "{{ owncloud_app_user }}"
         group: "{{ owncloud_app_group }}"
         mode: 0750
   when: owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
@@ -21,11 +21,11 @@
 - block:
     - name: Download ownCloud Release '{{ owncloud_version }}'
       get_url:
-        url: "{{ __owncloud_download_url }}"
+        url: "{{ owncloud_download_url }}"
         url_username: "{{ owncloud_download_auth_user | default(omit) }}"
         url_password: "{{ owncloud_download_auth_password | default(omit) }}"
         dest: "/tmp/{{ __owncloud_download_filename }}"
-        checksum: "{{ __owncloud_checksum_algorithm }}:{{ __owncloud_download_url }}.{{ __owncloud_checksum_algorithm }}"
+        checksum: "{{ __owncloud_checksum_algorithm }}:{{ owncloud_download_url }}.{{ __owncloud_checksum_algorithm }}"
         mode: 0644
 
     - name: Unpack the application archive
@@ -33,7 +33,7 @@
         remote_src: True
         src: "/tmp/{{ __owncloud_download_filename }}"
         dest: /tmp/owncloud_src
-        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        owner: "{{ owncloud_app_user }}"
         group: "{{ owncloud_app_group }}"
         extra_opts: [--strip-components=1]
   when:
@@ -43,7 +43,7 @@
 - block:
     - name: Copy install source to remote host
       copy:
-        src: "{{ __owncloud_download_url }}"
+        src: "{{ owncloud_download_url }}"
         dest: "/tmp/{{ __owncloud_offline_filename }}"
         mode: 0644
 
@@ -52,7 +52,7 @@
         remote_src: yes
         src: "/tmp/{{ __owncloud_offline_filename }}"
         dest: /tmp/owncloud_src
-        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        owner: "{{ owncloud_app_user }}"
         group: "{{ owncloud_app_group }}"
         extra_opts:
           - '--strip-components=1'
@@ -82,7 +82,7 @@
       file:
         src: "{{ item }}"
         dest: "{{ owncloud_deploy_path }}/{{ item | basename }}"
-        owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+        owner: "{{ owncloud_app_user }}"
         group: "{{ owncloud_app_group }}"
         state: link
       loop:
@@ -107,17 +107,17 @@
   template:
     src: var/www/owncloud/config/custom.config.php.j2
     dest: "{{ owncloud_deploy_path }}/config/user.config.php"
-    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    owner: "{{ owncloud_app_user }}"
     group: "{{ owncloud_app_group }}"
     mode: 0644
-    validate: "{{ php_executable | default(__php_executable) }} -f %s"
+    validate: "{{ php_executable }} -f %s"
 
 - name: Get ownCloud setup status
   command: "{{ owncloud_occ_executable | quote }} check"
   register: __owncloud_register_occ_check
   changed_when: False
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 - name: Determine if ownCloud autosetup should be done
   set_fact:
@@ -146,7 +146,7 @@
     {% endif %}
   run_once: True
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 - block:
     - name: Automatically finish upgrade via the occ tool
@@ -157,4 +157,6 @@
     - not owncloud_current_version is version_compare("0.0.0", operator="=", strict=True)
     - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
+
+...

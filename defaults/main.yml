@@ -1,10 +1,10 @@
 ---
 owncloud_version: "10.3.1"
 
-# @var owncloud_download_url: >
+# @var owncloud_download_url:description: >
 # You can set a custom download url especialy for the enterprise version.
 # @end
-# @var owncloud_download_url:example: $ "https://example.com/oc-{{ owncloud_version }}.tar.gz"
+owncloud_download_url: "https://download.owncloud.org/community/owncloud-{{ owncloud_version }}.tar.bz2"
 
 # owncloud_download_auth_user: # 
 
@@ -173,7 +173,7 @@ owncloud_cron_backend: cron
 # @end
 owncloud_cron_jobs:
   - name: oc cron.php
-    job: "{{ php_executable | default(__php_executable) }} -f {{ owncloud_deploy_path }}/cron.php"
+    job: "{{ php_executable }} -f {{ owncloud_deploy_path }}/cron.php"
     minute: '*/15'
 
 # owncloud_imprint_url: example.com/impressum # defaults to not set
@@ -192,7 +192,6 @@ owncloud_cron_jobs:
 
 owncloud_apps:
   - name: twofactor_totp
-  - name: gallery
   - name: password_policy
 
 owncloud_app_documents_provider: onlyoffice
@@ -205,3 +204,5 @@ owncloud_apps_config: []
 # @end
 owncloud_encryption_enabled: False
 owncloud_encryption_force_encrypt_all: False
+
+...

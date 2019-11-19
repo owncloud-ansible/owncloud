@@ -1,16 +1,13 @@
 ---
-__owncloud_download_url: "{{ owncloud_download_url | default('https://download.owncloud.org/community/owncloud-' + owncloud_version + '.tar.bz2') }}"
-__owncloud_download_filename: "{{ __owncloud_download_url | urlsplit('path') | basename }}"
-__owncloud_offline_filename: "{{ __owncloud_download_url | basename }}"
-__owncloud_checksum_algorithm: "{{ owncloud_checksum_algorithm | default('sha256') }}"
-__owncloud_gpg_pubkey_url: https://owncloud.org/owncloud.asc
+__owncloud_download_filename: "{{ owncloud_download_url | urlsplit('path') | basename }}"
+__owncloud_offline_filename: "{{ owncloud_download_url | basename }}"
+__owncloud_checksum_algorithm: sha256
 
 __owncloud_packages:
   - tar
   - unzip
   - bzip2
   - rsync
-  - gnupg2
 
 __owncloud_enable_sebooleans:
   - httpd_can_network_connect_db
@@ -320,17 +317,17 @@ __occ_core_config:
 
 __owncloud_fs_perm_fix:
   - path: "{{ owncloud_config_path }}/config.php"
-    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    owner: "{{ owncloud_app_user }}"
     group: "{{ owncloud_app_group }}"
     mode: "0640"
     state: file
   - path: "{{ owncloud_deploy_path }}/apps-external"
-    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    owner: "{{ owncloud_app_user }}"
     group: "{{ owncloud_app_group }}"
     mode: "0750"
     state: directory
   - path: "{{ owncloud_log_file }}"
-    owner: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+    owner: "{{ owncloud_app_user }}"
     group: "{{ owncloud_app_group }}"
     mode: "0640"
     state: file

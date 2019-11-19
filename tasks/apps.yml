@@ -22,14 +22,14 @@
         state: "{{ item.1.state | default(omit) }}"
         update_only: "{{ item.1.update_only | default(omit) }}"
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 - name: Get current encryption state
   command: "{{ owncloud_occ_executable | quote }} encryption:status --output json"
   changed_when: False
   register: __oc_encrypt
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 - block:
     - name: Enable encryption app
@@ -57,6 +57,6 @@
     - owncloud_current_version is version_compare("10.2.1", operator=">=", strict=True)
     - owncloud_encryption_enabled | bool
   become: True
-  become_user: "{{ owncloud_app_user | default(__owncloud_app_user) }}"
+  become_user: "{{ owncloud_app_user }}"
 
 ...
