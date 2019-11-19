@@ -29,4 +29,4 @@ def test_owncloud_cli(host):
     status = host.run("sudo -u www-data occ status | tr -d ' '").stdout
 
     assert "versionstring:10.3.1" in status
-    assert "installed:true" in status 
+    assert "installed:true" in status
