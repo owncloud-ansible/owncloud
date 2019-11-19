@@ -2,6 +2,10 @@
 logging:
   level: error
 
+custom_modules:
+  - oc_app
+  - oc_config
+
 rules:
   exclude_files:
     - molecule/

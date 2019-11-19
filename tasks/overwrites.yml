@@ -4,7 +4,7 @@
     owncloud_app_user: "{{ __owncloud_app_user }}"
   when: owncloud_app_user is not defined
 
-- name: Define owncloud_app_user
+- name: Define owncloud_python_executable
   set_fact:
     owncloud_python_executable: "{{ __owncloud_python_executable }}"
   when: owncloud_python_executable is not defined

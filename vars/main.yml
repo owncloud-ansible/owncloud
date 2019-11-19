@@ -331,3 +331,5 @@ __owncloud_fs_perm_fix:
     group: "{{ owncloud_app_group }}"
     mode: "0640"
     state: file
+
+...
