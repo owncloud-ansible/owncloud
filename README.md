@@ -251,8 +251,8 @@ Will be applied only if owncloud_cron_backend is 'cron'
 
 ```YAML
 owncloud_cron_jobs:
-  - name: oc cron.php
-    job: '{{ php_executable }} -f {{ owncloud_deploy_path }}/cron.php'
+  - name: oc cron
+    job: '{{ owncloud_occ_executable }} system:cron'
     minute: '*/15'
 ```
 
