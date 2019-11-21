@@ -7,7 +7,7 @@ set -o nounset -o pipefail -o errexit
 
 cd '{{ owncloud_deploy_path }}' || exit 1
 
-if [ "$USER" == '{{ owncloud__app_user }}' ]
+if [ "$USER" == '{{ owncloud_app_user }}' ]
 then
 	{{ php_executable }} --file '{{ owncloud_deploy_path }}/occ' "$@"
 else
