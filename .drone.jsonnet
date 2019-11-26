@@ -133,8 +133,8 @@ local PipelineNotification = {
     },
     depends_on: [
         "linting",
-        "testing-ubuntu1804",
-        "testing-centos7",
+        // "testing-ubuntu1804",
+        // "testing-centos7",
         "documentation",
     ],
 };

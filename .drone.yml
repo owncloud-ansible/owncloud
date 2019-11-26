@@ -96,12 +96,10 @@ trigger:
 
 depends_on:
 - linting
-- testing-ubuntu1804
-- testing-centos7
 - documentation
 
 ---
 kind: signature
-hmac: 7d57d162d3fb56cd36e60402971578f8b87bd22d7fb88d7ef1a7b3f716bd603a
+hmac: f9de851afd9af44ba1e2227c3817133f1ae217961bd1afde4fd70b074f1eba49
 
 ...
