@@ -1,5 +1,17 @@
 ---
+- debug:
+    msg: "{{ ansible_local.owncloud }}"
+
 - block:
+    - name: Disable deprecated ownCloud apps
+      oc_app:
+        name: "{{ item }}"
+        enabled: no
+        executable: "{{ owncloud_occ_executable | default(omit) }}"
+        state: current
+      loop: "{{ owncloud_apps_deprecated }}"
+      when: ansible_local.owncloud.installed | bool or ansible_local.owncloud.maintenance | bool
+
     - name: Enable maintainance mode
       command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --on"
       when:

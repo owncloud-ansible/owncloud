@@ -179,6 +179,13 @@ owncloud_cron_jobs:
 # owncloud_imprint_url: example.com/impressum # defaults to not set
 # owncloud_privacy_policy_url: example.com/impressum # defaults to not set
 
+# @var owncloud_apps_deprecated:description: >
+# To disable deprecated apps before a version upgrade we are introducing
+# this new env variables. This way the admin can control which app gets
+# properly disabled before an upgrade gets applies.
+# @end
+owncloud_apps_deprecated: []
+
 # @var owncloud_apps:example: >
 # owncloud_apps:
 #   - name: contacts
