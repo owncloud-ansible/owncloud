@@ -97,7 +97,7 @@ local PipelineDocumentation = {
         },
     ],
     trigger: {
-        ref: ["refs/heads/master", "refs/tags/**"],
+        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
     },
     depends_on: [
         "testing-ubuntu1804",

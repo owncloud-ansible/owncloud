@@ -132,6 +132,7 @@ trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - testing-ubuntu1804
@@ -170,6 +171,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 9e8792afe2538d96012b916f49e3a596d165e2f52790daca9dd7c9941c4f5979
+hmac: 22709de416baf025f7a7ef444c61e3073b8966780c356bd79618fa6d40138c7c
 
 ...
