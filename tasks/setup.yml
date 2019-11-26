@@ -48,7 +48,7 @@
         owner: "{{ owncloud_app_user }}"
         group: "{{ owncloud_app_group }}"
         extra_opts:
-        - "--strip-components=1"
+          - "--strip-components=1"
   when:
     - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
     - not owncloud_install_from_filesystem | bool
