@@ -49,7 +49,7 @@ local PipelineTesting(scenario="ubuntu1804") = {
         },
     ],
     trigger: {
-        ref: ["refs/heads/master", "refs/tags/**"],
+        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
     },
     depends_on: [
         "linting",
@@ -97,7 +97,7 @@ local PipelineDocumentation = {
         },
     ],
     trigger: {
-        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+        ref: ["refs/heads/master", "refs/tags/**"],
     },
     depends_on: [
         "testing-ubuntu1804",

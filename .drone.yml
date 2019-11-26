@@ -49,6 +49,7 @@ trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - linting
@@ -84,6 +85,7 @@ trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - linting
@@ -130,7 +132,6 @@ trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
-  - refs/pull/**
 
 depends_on:
 - testing-ubuntu1804
@@ -169,6 +170,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 6c05ff3b28db703487b1c34cb7048ba3896f56f0bdad957a07aa43ceaa590df7
+hmac: 9e8792afe2538d96012b916f49e3a596d165e2f52790daca9dd7c9941c4f5979
 
 ...
