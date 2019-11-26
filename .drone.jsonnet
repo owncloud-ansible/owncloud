@@ -92,10 +92,10 @@ local PipelineDocumentation = {
     trigger: {
         ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
     },
-    depends_on: [
-        "testing-ubuntu1804",
-        "testing-centos7"
-    ],
+    // depends_on: [
+    //     "testing-ubuntu1804",
+    //     "testing-centos7"
+    // ],
 };
 
 local PipelineNotification = {

@@ -55,10 +55,6 @@ trigger:
   - refs/tags/**
   - refs/pull/**
 
-depends_on:
-- testing-ubuntu1804
-- testing-centos7
-
 ---
 kind: pipeline
 name: notification
@@ -100,6 +96,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f9de851afd9af44ba1e2227c3817133f1ae217961bd1afde4fd70b074f1eba49
+hmac: 79658aca55d4990543ec82bbd03b2ba436eb943b5654c1dee9f36cda0ea58221
 
 ...
