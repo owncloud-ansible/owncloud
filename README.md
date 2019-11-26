@@ -1,10 +1,5 @@
 # owncloud
 
-[![Build Status](https://drone.owncloud.com/api/badges/owncloud-ansible/owncloud/status.svg)](https://drone.owncloud.com/owncloud-ansible/owncloud)
-
-> **WARNING**: This Ansible role is currently in beta state. Use it at your own risk.
-
-
 Ansible role to setup an ownCloud server
 
 ## Table of content
@@ -19,6 +14,7 @@ Ansible role to setup an ownCloud server
   * [owncloud_app_group](#owncloud_app_group)
   * [owncloud_apps](#owncloud_apps)
   * [owncloud_apps_config](#owncloud_apps_config)
+  * [owncloud_apps_deprecated](#owncloud_apps_deprecated)
   * [owncloud_autosetup](#owncloud_autosetup)
   * [owncloud_config_extra](#owncloud_config_extra)
   * [owncloud_config_path](#owncloud_config_path)
@@ -197,6 +193,16 @@ owncloud_apps:
 
 ```YAML
 owncloud_apps_config: []
+```
+
+### owncloud_apps_deprecated
+
+To disable deprecated apps before a version upgrade we are introducing this new env variables. This way the admin can control which app gets properly disabled before an upgrade gets applies.
+
+#### Default value
+
+```YAML
+owncloud_apps_deprecated: []
 ```
 
 ### owncloud_autosetup

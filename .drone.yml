@@ -102,28 +102,21 @@ steps:
 - name: generate
   image: xoxys/ansible-doctor:latest
   environment:
-    ANSIBLE_DOCTOR_CUSTOM_HEADER: HEADER.md
     ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
     ANSIBLE_DOCTOR_LOG_LEVEL: INFO
+    ANSIBLE_DOCTOR_THEME: hugo
+    ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
 
-- name: commit
-  image: plugins/git-action:latest
+- name: publish
+  image: plugins/gh-pages:latest
   settings:
-    actions:
-    - commit
-    - push
-    author_email:
-      from_secret: github_author_email
-    author_name: ownClouders
-    branch: master
-    message: "[SKIP CI] update readme"
-    netrc_machine: " github.com"
-    netrc_password:
-      from_secret: github_token
-    netrc_username:
+    username:
       from_secret: github_username
-    remote: https://github.com/owncloud-ansible/owncloud
+    password:
+      from_secret: github_token
+    pages_directory: _docs/
+    target_branch: docs
   when:
     ref:
     - refs/heads/master
