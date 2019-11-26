@@ -1,7 +1,4 @@
 ---
-- debug:
-    msg: "{{ ansible_local.owncloud }}"
-
 - block:
     - name: Disable deprecated ownCloud apps
       oc_app:
