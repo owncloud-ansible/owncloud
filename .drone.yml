@@ -105,18 +105,18 @@ steps:
     ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
     ANSIBLE_DOCTOR_LOG_LEVEL: INFO
-    ANSIBLE_DOCTOR_THEME: hugo
     ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
+    ANSIBLE_DOCTOR_THEME: hugo
 
 - name: publish
   image: plugins/gh-pages:latest
   settings:
-    username:
-      from_secret: github_username
+    pages_directory: _docs/
     password:
       from_secret: github_token
-    pages_directory: _docs/
     target_branch: docs
+    username:
+      from_secret: github_username
   when:
     ref:
     - refs/heads/master
@@ -140,6 +140,19 @@ platform:
   arch: amd64
 
 steps:
+- name: docs
+  image: plugins/downstream
+  settings:
+    fork: true
+    repositories:
+    - owncloud-ansible/owncloud-ansible.github.io@source
+    server: https://drone.owncloud.com
+    token:
+      from_secret: drone_token
+  when:
+    ref:
+    - refs/heads/docs
+
 - name: notify
   image: plugins/slack:1
   settings:
@@ -151,6 +164,7 @@ steps:
 trigger:
   ref:
   - refs/heads/master
+  - refs/heads/docs
   - refs/tags/**
   status:
   - success
@@ -164,6 +178,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 22709de416baf025f7a7ef444c61e3073b8966780c356bd79618fa6d40138c7c
+hmac: e5657f353ce59b85209eb3b69a29369f72f07b6dfb16986c9c360acbfeafd42e
 
 ...
