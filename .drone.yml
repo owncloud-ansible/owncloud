@@ -20,78 +20,6 @@ trigger:
 
 ---
 kind: pipeline
-name: testing-ubuntu1804
-
-platform:
-  os: linux
-  arch: amd64
-
-concurrency:
-  limit: 1
-
-workspace:
-  base: /drone/src
-  path: owncloud
-
-steps:
-- name: molecule
-  image: xoxys/molecule:hcloud-linux-amd64
-  commands:
-  - /bin/bash /docker-entrypoint.sh
-  - molecule test -s ubuntu1804
-  environment:
-    HCLOUD_TOKEN:
-      from_secret: hcloud_token
-    PY_COLORS: 1
-    USER: root
-
-trigger:
-  ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
-
-depends_on:
-- linting
-
----
-kind: pipeline
-name: testing-centos7
-
-platform:
-  os: linux
-  arch: amd64
-
-concurrency:
-  limit: 1
-
-workspace:
-  base: /drone/src
-  path: owncloud
-
-steps:
-- name: molecule
-  image: xoxys/molecule:hcloud-linux-amd64
-  commands:
-  - /bin/bash /docker-entrypoint.sh
-  - molecule test -s centos7
-  environment:
-    HCLOUD_TOKEN:
-      from_secret: hcloud_token
-    PY_COLORS: 1
-    USER: root
-
-trigger:
-  ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
-
-depends_on:
-- linting
-
----
-kind: pipeline
 name: documentation
 
 platform:
@@ -106,7 +34,7 @@ steps:
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
     ANSIBLE_DOCTOR_LOG_LEVEL: INFO
     ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
-    ANSIBLE_DOCTOR_THEME: hugo
+    ANSIBLE_DOCTOR_TEMPLATE: hugo
 
 - name: publish
   image: plugins/gh-pages:latest
@@ -149,9 +77,6 @@ steps:
     server: https://drone.owncloud.com
     token:
       from_secret: drone_token
-  when:
-    ref:
-    - refs/heads/docs
 
 - name: notify
   image: plugins/slack:1
@@ -164,7 +89,6 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - refs/heads/docs
   - refs/tags/**
   status:
   - success
@@ -178,6 +102,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: b9e89a7ca93642bd286ecd19bda52f393a57d79e7b17873207c6162783196ab1
+hmac: 7d57d162d3fb56cd36e60402971578f8b87bd22d7fb88d7ef1a7b3f716bd603a
 
 ...

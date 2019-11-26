@@ -71,7 +71,7 @@ local PipelineDocumentation = {
                 ANSIBLE_DOCTOR_LOG_LEVEL: "INFO",
                 ANSIBLE_DOCTOR_FORCE_OVERWRITE: true,
                 ANSIBLE_DOCTOR_EXCLUDE_FILES: "molecule/",
-                ANSIBLE_DOCTOR_THEME: "hugo",
+                ANSIBLE_DOCTOR_TEMPLATE: "hugo",
                 ANSIBLE_DOCTOR_OUTPUT_DIR: "_docs/",
             },
         },
@@ -117,9 +117,6 @@ local PipelineNotification = {
                     "owncloud-ansible/owncloud-ansible.github.io@source",
                 ],
             },
-            when: {
-                ref: ["refs/heads/docs"],
-            },
         },
         {
             name: "notify",
@@ -131,7 +128,7 @@ local PipelineNotification = {
         },
     ],
     trigger: {
-        ref: ["refs/heads/master", "refs/heads/docs", "refs/tags/**"],
+        ref: ["refs/heads/master", "refs/tags/**"],
         status: ["success", "failure"],
     },
     depends_on: [
@@ -145,8 +142,8 @@ local PipelineNotification = {
 
 [
     PipelineLinting,
-    PipelineTesting(scenario="ubuntu1804"),
-    PipelineTesting(scenario="centos7"),
+    // PipelineTesting(scenario="ubuntu1804"),
+    // PipelineTesting(scenario="centos7"),
     PipelineDocumentation,
     PipelineNotification,
 ]
