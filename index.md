@@ -1,4 +1,6 @@
-# src
+---
+title: src 
+---
 
 Ansible role to setup an ownCloud server
 
@@ -897,11 +899,3 @@ owncloud_web_default_language: en_US
 ## Dependencies
 
 None.
-
-## License
-
-Apache-2.0
-
-## Author
-
-Robert Kaussow
