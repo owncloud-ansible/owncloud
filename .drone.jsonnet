@@ -107,7 +107,7 @@ local PipelineNotification = {
     },
     steps: [
         {
-            name: "trigger",
+            name: "docs",
             image: "plugins/downstream",
             settings: {
                 server: "https://drone.owncloud.com",
