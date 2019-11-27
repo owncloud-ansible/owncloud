@@ -71,7 +71,7 @@ local PipelineDocumentation = {
                 ANSIBLE_DOCTOR_LOG_LEVEL: "INFO",
                 ANSIBLE_DOCTOR_FORCE_OVERWRITE: true,
                 ANSIBLE_DOCTOR_EXCLUDE_FILES: "molecule/",
-                ANSIBLE_DOCTOR_TEMPLATE: "hugo",
+                ANSIBLE_DOCTOR_TEMPLATE: "hugo-book",
                 ANSIBLE_DOCTOR_OUTPUT_DIR: "_docs/",
             },
         },

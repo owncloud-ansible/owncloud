@@ -34,7 +34,7 @@ steps:
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
     ANSIBLE_DOCTOR_LOG_LEVEL: INFO
     ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
-    ANSIBLE_DOCTOR_TEMPLATE: hugo
+    ANSIBLE_DOCTOR_TEMPLATE: hugo-book
 
 - name: publish
   image: plugins/gh-pages:latest
@@ -96,6 +96,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 79658aca55d4990543ec82bbd03b2ba436eb943b5654c1dee9f36cda0ea58221
+hmac: d7605c3becc51c4587a60a773c895e773f2b8ff8fb08e3ddb4c67f30bc6f1cab
 
 ...
