@@ -121,6 +121,16 @@ steps:
     ref:
     - refs/heads/master
 
+- name: trigger
+  image: plugins/downstream
+  settings:
+    fork: true
+    repositories:
+    - owncloud-ansible/owncloud-ansible.github.io@source
+    server: https://drone.owncloud.com
+    token:
+      from_secret: drone_token
+
 trigger:
   ref:
   - refs/heads/master
@@ -140,19 +150,6 @@ platform:
   arch: amd64
 
 steps:
-- name: docs
-  image: plugins/downstream
-  settings:
-    fork: true
-    repositories:
-    - owncloud-ansible/owncloud-ansible.github.io@source
-    server: https://drone.owncloud.com
-    token:
-      from_secret: drone_token
-  when:
-    status:
-    - success
-
 - name: notify
   image: plugins/slack:1
   settings:
@@ -177,6 +174,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 12e839c4e452c7fd20b4aea50ef7198cbe2cba13e7b0c08945afec731e4938e1
+hmac: b5ec5d061a2ba59758a47457658aaa096fd3ecc4bb8623d9e85692cc3b5d0791
 
 ...
