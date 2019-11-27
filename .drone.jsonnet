@@ -88,6 +88,18 @@ local PipelineDocumentation = {
                 ref: ["refs/heads/master"],
             },
         },
+        {
+            name: "trigger",
+            image: "plugins/downstream",
+            settings: {
+                server: "https://drone.owncloud.com",
+                token: { from_secret: "drone_token" },
+                fork: true,
+                repositories: [
+                    "owncloud-ansible/owncloud-ansible.github.io@source",
+                ],
+            },
+        },
     ],
     trigger: {
         ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
@@ -106,21 +118,6 @@ local PipelineNotification = {
         arch: "amd64",
     },
     steps: [
-        {
-            name: "docs",
-            image: "plugins/downstream",
-            settings: {
-                server: "https://drone.owncloud.com",
-                token: { from_secret: "drone_token" },
-                fork: true,
-                repositories: [
-                    "owncloud-ansible/owncloud-ansible.github.io@source",
-                ],
-            },
-            when: {
-                status: ["success"],
-            },
-        },
         {
             name: "notify",
             image: "plugins/slack:1",
