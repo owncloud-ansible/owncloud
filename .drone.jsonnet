@@ -92,10 +92,10 @@ local PipelineDocumentation = {
     trigger: {
         ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
     },
-    // depends_on: [
-    //     "testing-ubuntu1804",
-    //     "testing-centos7"
-    // ],
+    depends_on: [
+        "testing-ubuntu1804",
+        "testing-centos7"
+    ],
 };
 
 local PipelineNotification = {
@@ -117,6 +117,9 @@ local PipelineNotification = {
                     "owncloud-ansible/owncloud-ansible.github.io@source",
                 ],
             },
+            when: {
+                status: ["success"],
+            },
         },
         {
             name: "notify",
@@ -133,8 +136,8 @@ local PipelineNotification = {
     },
     depends_on: [
         "linting",
-        // "testing-ubuntu1804",
-        // "testing-centos7",
+        "testing-ubuntu1804",
+        "testing-centos7",
         "documentation",
     ],
 };
@@ -142,8 +145,8 @@ local PipelineNotification = {
 
 [
     PipelineLinting,
-    // PipelineTesting(scenario="ubuntu1804"),
-    // PipelineTesting(scenario="centos7"),
+    PipelineTesting(scenario="ubuntu1804"),
+    PipelineTesting(scenario="centos7"),
     PipelineDocumentation,
     PipelineNotification,
 ]

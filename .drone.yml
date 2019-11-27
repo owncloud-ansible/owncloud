@@ -20,6 +20,78 @@ trigger:
 
 ---
 kind: pipeline
+name: testing-ubuntu1804
+
+platform:
+  os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
+workspace:
+  base: /drone/src
+  path: owncloud
+
+steps:
+- name: molecule
+  image: xoxys/molecule:hcloud-linux-amd64
+  commands:
+  - /bin/bash /docker-entrypoint.sh
+  - molecule test -s ubuntu1804
+  environment:
+    HCLOUD_TOKEN:
+      from_secret: hcloud_token
+    PY_COLORS: 1
+    USER: root
+
+trigger:
+  ref:
+  - refs/heads/master
+  - refs/tags/**
+  - refs/pull/**
+
+depends_on:
+- linting
+
+---
+kind: pipeline
+name: testing-centos7
+
+platform:
+  os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
+workspace:
+  base: /drone/src
+  path: owncloud
+
+steps:
+- name: molecule
+  image: xoxys/molecule:hcloud-linux-amd64
+  commands:
+  - /bin/bash /docker-entrypoint.sh
+  - molecule test -s centos7
+  environment:
+    HCLOUD_TOKEN:
+      from_secret: hcloud_token
+    PY_COLORS: 1
+    USER: root
+
+trigger:
+  ref:
+  - refs/heads/master
+  - refs/tags/**
+  - refs/pull/**
+
+depends_on:
+- linting
+
+---
+kind: pipeline
 name: documentation
 
 platform:
@@ -55,6 +127,10 @@ trigger:
   - refs/tags/**
   - refs/pull/**
 
+depends_on:
+- testing-ubuntu1804
+- testing-centos7
+
 ---
 kind: pipeline
 name: notification
@@ -73,6 +149,9 @@ steps:
     server: https://drone.owncloud.com
     token:
       from_secret: drone_token
+  when:
+    status:
+    - success
 
 - name: notify
   image: plugins/slack:1
@@ -92,10 +171,12 @@ trigger:
 
 depends_on:
 - linting
+- testing-ubuntu1804
+- testing-centos7
 - documentation
 
 ---
 kind: signature
-hmac: d7605c3becc51c4587a60a773c895e773f2b8ff8fb08e3ddb4c67f30bc6f1cab
+hmac: 12e839c4e452c7fd20b4aea50ef7198cbe2cba13e7b0c08945afec731e4938e1
 
 ...
