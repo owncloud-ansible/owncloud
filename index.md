@@ -1,10 +1,8 @@
 ---
-title: owncloud 
+title: owncloud
+type: docs
 ---
-
 Ansible role to setup an ownCloud server
-
-## Table of content
 
 * [Default Variables](#default-variables)
   * [owncloud_admin_password](#owncloud_admin_password)
@@ -102,8 +100,6 @@ Ansible role to setup an ownCloud server
   * [owncloud_version_hide](#owncloud_version_hide)
   * [owncloud_web_default_language](#owncloud_web_default_language)
 * [Dependencies](#dependencies)
-* [License](#license)
-* [Author](#author)
 
 ---
 
