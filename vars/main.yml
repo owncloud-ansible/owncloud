@@ -93,6 +93,9 @@ __owncloud_role_config:
   'csrf.disabled': "{{ not owncloud_csrf_enabled }}"
 
   skeletondirectory: "{{ owncloud_skeleton_path }}"
+  "htaccess.RewriteBase":
+    state: '{{ "present" if owncloud_rewrite_base_enabled else "absent" }}'
+    value: "/"
 
 __occ_core_config:
   - name: core

@@ -25,4 +25,21 @@
   loop_control:
     label: "{{ item.name }}"
 
+- name: Get current htaccess rewrite state from .htaccess file
+  command: "/bin/grep 'RewriteBase /' /var/www/owncloud/.htaccess"
+  register: owncloud_register_htaccess_rewrite_check
+  check_mode: no
+  failed_when: "owncloud_register_htaccess_rewrite_check.rc == 2"
+  changed_when: False
+  become: True
+  become_user: "{{ owncloud_app_user }}"
+
+- name: Update htaccess rewrite rules
+  command: "{{ owncloud_occ_executable | quote }} maintenance:update:htaccess"
+  register: owncloud_register_occ_rewrite_htaccess_rules
+  failed_when: "not '.htaccess has been updated' in owncloud_register_occ_rewrite_htaccess_rules.stdout"
+  become: True
+  become_user: "{{ owncloud_app_user }}"
+  when: "(('RewriteBase /' in owncloud_register_htaccess_rewrite_check.stdout)|bool) != (owncloud_rewrite_base_enabled|bool)"
+
 ...

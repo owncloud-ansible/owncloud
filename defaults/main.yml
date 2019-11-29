@@ -205,4 +205,11 @@ owncloud_apps_config: []
 owncloud_encryption_enabled: False
 owncloud_encryption_force_encrypt_all: False
 
+# @var owncloud_rewrite_base_enabled:description: >
+# When enabled, this will add rewrite rules in .htaccess that makes
+# it possible to remove the "index.php" in the URL.
+# See https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html#define-clean-urls-without-index-php
+# @end
+owncloud_rewrite_base_enabled: True
+
 ...
