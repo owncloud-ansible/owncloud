@@ -99,6 +99,9 @@ local PipelineDocumentation = {
                     "owncloud-ansible/owncloud-ansible.github.io@source",
                 ],
             },
+            when: {
+                ref: ["refs/heads/master"],
+            },
         },
     ],
     trigger: {
