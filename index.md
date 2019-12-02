@@ -2,7 +2,10 @@
 title: owncloud
 type: docs
 ---
-Ansible role to setup an ownCloud server
+
+> **WARNING**: This Ansible role is currently in beta state. Use it at your own risk. 
+
+Ansible role to setup an ownCloud server. Currently, only a single ownCloud server is supported. Support for clustered mode is planned but not included right now.
 
 * [Default Variables](#default-variables)
   * [owncloud_admin_password](#owncloud-admin-password)
@@ -175,13 +178,13 @@ owncloud_apps:
 
 ```YAML
 owncloud_apps:
-  - name: contacts
-  - name: http://market.owncloud.local/carnet-0.16.2.tar.gz
-    from_url: yes
-    url_username: my_user
-    url_password:my_password
-    force_basic_auth: true
-    state: present
+- name: contacts
+- name: http://market.owncloud.local/carnet-0.16.2.tar.gz
+from_url: yes
+url_username: my_user
+url_password:my_password
+force_basic_auth: true
+state: present
 ```
 
 ### owncloud_apps_config
