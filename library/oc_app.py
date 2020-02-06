@@ -306,7 +306,6 @@ def main():
     if state == 'current':
         skip_install = True
 
-
     if not skip_install:
         rc, out_occ, err_occ = module.run_command(cmd, cwd=chdir)
         out += out_occ
