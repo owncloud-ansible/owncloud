@@ -2,6 +2,7 @@
 - name: Converge
   hosts: all
   vars:
+    owncloud_apt_cache_update: True
     owncloud_trusted_domains:
       - "{{ owncloud_fqdn }}"
       - "{{ ansible_default_ipv4.address }}"
