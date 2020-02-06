@@ -3,7 +3,9 @@ title: owncloud
 type: docs
 ---
 
-> **WARNING**: This Ansible role is currently in beta state. Use it at your own risk. 
+[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/owncloud-ansible/owncloud) [![Build Status](https://drone.owncloud.com/api/badges/owncloud-ansible/owncloud/status.svg)](https://drone.owncloud.com/owncloud-ansible/owncloud) [![GitHub](https://img.shields.io/github/license/owncloud-ansible/owncloud)](https://github.com/owncloud-ansible/owncloud/blob/master/LICENSE) 
+
+{{< hint warning >}} __Warning__<br/> This Ansible role is currently in beta state. Use it at your own risk. {{< /hint >}} 
 
 Ansible role to setup an ownCloud server. Currently, only a single ownCloud server is supported. Support for clustered mode is planned but not included right now.
 
@@ -17,6 +19,8 @@ Ansible role to setup an ownCloud server. Currently, only a single ownCloud serv
   * [owncloud_app_group](#owncloud-app-group)
   * [owncloud_apps](#owncloud-apps)
   * [owncloud_apps_config](#owncloud-apps-config)
+  * [owncloud_apps_deprecated](#owncloud-apps-deprecated)
+  * [owncloud_apt_cache_update](#owncloud-apt-cache-update)
   * [owncloud_autosetup](#owncloud-autosetup)
   * [owncloud_config_extra](#owncloud-config-extra)
   * [owncloud_config_path](#owncloud-config-path)
@@ -178,13 +182,13 @@ owncloud_apps:
 
 ```YAML
 owncloud_apps:
-- name: contacts
-- name: http://market.owncloud.local/carnet-0.16.2.tar.gz
-from_url: yes
-url_username: my_user
-url_password:my_password
-force_basic_auth: true
-state: present
+  - name: contacts
+  - name: http://market.owncloud.local/carnet-0.16.2.tar.gz
+    from_url: yes
+    url_username: my_user
+    url_password:my_password
+    force_basic_auth: true
+    state: present
 ```
 
 ### owncloud_apps_config
@@ -193,6 +197,26 @@ state: present
 
 ```YAML
 owncloud_apps_config: []
+```
+
+### owncloud_apps_deprecated
+
+To disable deprecated apps before a version upgrade we are introducing this new env variables. This way the admin can control which app gets properly disabled before an upgrade gets applies.
+
+#### Default value
+
+```YAML
+owncloud_apps_deprecated: []
+```
+
+### owncloud_apt_cache_update
+
+Automatically update apt cache on package installations. This setting will only applied on apt-based operating systems e.g. Ubuntu.
+
+#### Default value
+
+```YAML
+owncloud_apt_cache_update: false
 ```
 
 ### owncloud_autosetup
@@ -417,6 +441,13 @@ owncloud_fqdn: owncloud.example.com
 
 ```YAML
 owncloud_install_from_filesystem: false
+```
+
+#### Example usage
+
+```YAML
+owncloud_install_from_filesystem: True
+owncloud_download_url: /tmp/owncloud-10.3.1.tar.bz2
 ```
 
 ### owncloud_integrity_ignore_missing_app_signature
