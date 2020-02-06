@@ -6,17 +6,23 @@ owncloud_version: "10.3.1"
 # @end
 owncloud_download_url: "https://download.owncloud.org/community/owncloud-{{ owncloud_version }}.tar.bz2"
 
-# owncloud_download_auth_user: # 
+# owncloud_download_auth_user: #
 
 # owncloud_download_auth_password: # defaults to not set
 
 owncloud_install_from_filesystem: False
-# owncloud_install_from_filesystem:example: >
+# @var owncloud_install_from_filesystem:example: >
 # owncloud_install_from_filesystem: True
-# owncloud_download_url: /tmp/owncloud-enterprise-complete-20190516.tar.bz2
+# owncloud_download_url: /tmp/owncloud-10.3.1.tar.bz2
 # @end
 
 owncloud_release_channel: production
+
+# @var owncloud_apt_cache_update:description: >
+# Automatically update apt cache on package installations.
+# This setting will only applied on apt-based operating systems e.g. Ubuntu.
+# @end
+owncloud_apt_cache_update: False
 
 owncloud_packages_extra: []
 
@@ -178,6 +184,13 @@ owncloud_cron_jobs:
 
 # owncloud_imprint_url: example.com/impressum # defaults to not set
 # owncloud_privacy_policy_url: example.com/impressum # defaults to not set
+
+# @var owncloud_apps_deprecated:description: >
+# To disable deprecated apps before a version upgrade we are introducing
+# this new env variables. This way the admin can control which app gets
+# properly disabled before an upgrade gets applies.
+# @end
+owncloud_apps_deprecated: []
 
 # @var owncloud_apps:example: >
 # owncloud_apps:
