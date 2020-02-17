@@ -4,6 +4,7 @@ __owncloud_offline_filename: "{{ owncloud_download_url | basename }}"
 __owncloud_checksum_algorithm: sha256
 
 __owncloud_packages:
+  - sudo
   - tar
   - unzip
   - bzip2
