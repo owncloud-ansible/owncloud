@@ -255,7 +255,7 @@ owncloud_cors_allowed_domains: []
 
 ### owncloud_cron_backend
 
-Possible values are `webcron|cron|ajax`. See: https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.htmlcron-jobs
+Possible values are `webcron|cron|ajax`. See: https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs
 
 #### Default value
 
@@ -278,7 +278,7 @@ owncloud_cron_jobs:
 
 ### owncloud_csrf_enabled
 
-Be careful! See https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.htmldisable-ownclouds-built-in-csrf-protection-mechanism
+Be careful! See https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html#disable-ownclouds-built-in-csrf-protection-mechanism
 
 #### Default value
 
