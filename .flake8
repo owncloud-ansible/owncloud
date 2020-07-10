@@ -1,0 +1,5 @@
+[flake8]
+ignore = D101, D102, D103, D105, D107, E402, W503
+max-line-length = 99
+inline-quotes = double
+exclude = .git,.tox,__pycache__,build,dist,tests,*.pyc,*.egg-info,.cache,.eggs,env
