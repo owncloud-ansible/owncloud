@@ -37,7 +37,6 @@ steps:
 - name: molecule
   image: xoxys/molecule:3
   commands:
-  - /bin/bash /docker-entrypoint.sh
   - molecule test -s ubuntu1804
   environment:
     HCLOUD_TOKEN:
@@ -73,7 +72,6 @@ steps:
 - name: molecule
   image: xoxys/molecule:3
   commands:
-  - /bin/bash /docker-entrypoint.sh
   - molecule test -s centos7
   environment:
     HCLOUD_TOKEN:
@@ -177,6 +175,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: d7f6746d1f688c659f6803bb1681081d6670c8070c21ebbb740c1ab2d080b3c5
+hmac: db076a57215199e68998140875ae16f0a660e433d26ddcb29c0276294e028915
 
 ...
