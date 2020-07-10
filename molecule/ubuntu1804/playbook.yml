@@ -2,6 +2,11 @@
 - name: Converge
   hosts: all
   vars:
+    mariadb_apt_cache_update: True
+    redis_apt_cache_update: True
+    apache_apt_cache_update: True
+    php_apt_cache_update: True
+    owncloud_apt_cache_update: True
     owncloud_trusted_domains:
       - "{{ owncloud_fqdn }}"
       - "{{ ansible_default_ipv4.address }}"

@@ -49,7 +49,7 @@ local PipelineTesting(scenario="ubuntu1804") = {
         },
     ],
     trigger: {
-        ref: ["refs/heads/master", "refs/tags/**"],
+        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
     },
     depends_on: [
         "linting",
@@ -71,25 +71,33 @@ local PipelineDocumentation = {
                 ANSIBLE_DOCTOR_LOG_LEVEL: "INFO",
                 ANSIBLE_DOCTOR_FORCE_OVERWRITE: true,
                 ANSIBLE_DOCTOR_EXCLUDE_FILES: "molecule/",
-                ANSIBLE_DOCTOR_CUSTOM_HEADER: "HEADER.md",
+                ANSIBLE_DOCTOR_TEMPLATE: "hugo-book",
+                ANSIBLE_DOCTOR_OUTPUT_DIR: "_docs/",
             },
         },
         {
-            name: "commit",
-            image: "plugins/git-action:latest",
+            name: "publish",
+            image: "plugins/gh-pages:latest",
             settings: {
-                actions: [
-                    "commit",
-                    "push"
+                username: { from_secret: "github_username" },
+                password: { from_secret: "github_token" },
+                pages_directory: "_docs/",
+                target_branch: "docs",
+            },
+            when: {
+                ref: ["refs/heads/master"],
+            },
+        },
+        {
+            name: "trigger",
+            image: "plugins/downstream",
+            settings: {
+                server: "https://drone.owncloud.com",
+                token: { from_secret: "drone_token" },
+                fork: true,
+                repositories: [
+                    "owncloud-ansible/owncloud-ansible.github.io@source",
                 ],
-                author_email: { from_secret: "github_author_email" },
-                author_name: "ownClouders",
-                branch: "master",
-                message: "[SKIP CI] update readme",
-                remote: "https://github.com/owncloud-ansible/owncloud",
-                netrc_machine:" github.com",
-                netrc_username: { from_secret: "github_username" },
-                netrc_password: { from_secret: "github_token" },
             },
             when: {
                 ref: ["refs/heads/master"],

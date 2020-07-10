@@ -8,8 +8,11 @@
   become_user: "{{ owncloud_app_user }}"
 
 - name: Disable maintainance mode
-  command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --off"
+  command: "{{ owncloud_occ_executable | quote }} {{ item }}"
   changed_when: False
+  loop:
+    - "maintenance:singleuser --off"
+    - "maintenance:mode --off"
   become: True
   become_user: "{{ owncloud_app_user }}"
 

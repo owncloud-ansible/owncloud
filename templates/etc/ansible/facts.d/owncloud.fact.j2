@@ -1,39 +1,36 @@
-#!/usr/bin/env {{ owncloud_python_executable }}
+#!{{ ansible_python.executable }}
 
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
-from __future__ import print_function
-import os
 from json import loads, dumps
 import subprocess
 
-output = loads('''{{ ({
-    "installed": false
-    }) | to_nice_json }}''')
+output = dict({
+    "installed": False,
+    "maintenance": False,
+    "version": "0.0.0"
+})
+command = "{{ owncloud_occ_executable }} config:list --no-warnings --output=json"
 
+try:
+    config_cmd = subprocess.Popen(
+        command.split(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    std_out, std_err = config_cmd.communicate()
 
-if os.path.isfile('{{ owncloud_deploy_path + "/config/config.php" }}'):
-    try:
-        config_cmd = subprocess.Popen(
-            ['{{ php_executable }}', '-r', 'include "{{ owncloud_deploy_path + "/config/config.php" }}"; echo json_encode($CONFIG);'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-    except:
-        pass
-    else:
-        std_out, std_err = config_cmd.communicate()
+    if config_cmd.returncode == 0 and not std_err:
+        config = loads(std_out)["system"]
 
-        if config_cmd.returncode == 0 and len(std_err) == 0:
-            config = loads(std_out)
-            for key in ['instanceid', 'version', 'updatechecker', 'theme', 'maintenance', 'datadirectory', 'trusted_domains']:
-                if key in config:
-                    output[key] = config[key]
+        for key in ['version', 'maintenance', 'installed']:
+            if key in config:
+                output[key] = config[key]
 
-if 'version' in output:
-    output['version'] = '.'.join(output['version'].split('.')[:3])
-    output['release'] = '.'.join(output['version'].split('.')[:2])
-else:
-    output['version'] = "0.0.0"
+        if 'version' in output:
+            output['version'] = '.'.join(output['version'].split('.')[:3])
+            output['release'] = '.'.join(output['version'].split('.')[:2])
+except:
+    pass
 
 print(dumps(output, sort_keys=True, indent=2))

@@ -49,6 +49,7 @@ trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - linting
@@ -84,6 +85,7 @@ trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - linting
@@ -100,28 +102,34 @@ steps:
 - name: generate
   image: xoxys/ansible-doctor:latest
   environment:
-    ANSIBLE_DOCTOR_CUSTOM_HEADER: HEADER.md
     ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
     ANSIBLE_DOCTOR_LOG_LEVEL: INFO
+    ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
+    ANSIBLE_DOCTOR_TEMPLATE: hugo-book
 
-- name: commit
-  image: plugins/git-action:latest
+- name: publish
+  image: plugins/gh-pages:latest
   settings:
-    actions:
-    - commit
-    - push
-    author_email:
-      from_secret: github_author_email
-    author_name: ownClouders
-    branch: master
-    message: "[SKIP CI] update readme"
-    netrc_machine: " github.com"
-    netrc_password:
+    pages_directory: _docs/
+    password:
       from_secret: github_token
-    netrc_username:
+    target_branch: docs
+    username:
       from_secret: github_username
-    remote: https://github.com/owncloud-ansible/owncloud
+  when:
+    ref:
+    - refs/heads/master
+
+- name: trigger
+  image: plugins/downstream
+  settings:
+    fork: true
+    repositories:
+    - owncloud-ansible/owncloud-ansible.github.io@source
+    server: https://drone.owncloud.com
+    token:
+      from_secret: drone_token
   when:
     ref:
     - refs/heads/master
@@ -169,6 +177,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 6c05ff3b28db703487b1c34cb7048ba3896f56f0bdad957a07aa43ceaa590df7
+hmac: e2cef6a6ad989f91a858dc149767275022ce8c75e3fbfecf58d2b59d87d856dd
 
 ...

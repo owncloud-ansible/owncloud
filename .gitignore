@@ -9,3 +9,5 @@ __pycache__/
 
 # ---> Misc
 *.swp
+_docs/
+local/
