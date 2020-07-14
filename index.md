@@ -907,7 +907,7 @@ owncloud_upgrade_migration_test: true
 #### Default value
 
 ```YAML
-owncloud_version: 10.3.1
+owncloud_version: 10.4.1
 ```
 
 ### owncloud_version_hide
