@@ -9,6 +9,15 @@
   become: True
   become_user: "{{ owncloud_app_user }}"
 
+- name: Set user env variable for crontab
+  cron:
+    name: USER
+    env: True
+    job: "{{ owncloud_app_user }}"
+    user: "{{ owncloud_app_user }}"
+    cron_file: owncloud
+    state: "{{ 'present' if owncloud_cron_backend == 'cron' else 'absent' }}"
+
 - name: Setup system background jobs
   cron:
     name: "{{ item.name }}"

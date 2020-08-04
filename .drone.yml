@@ -8,7 +8,7 @@ platform:
 
 steps:
 - name: later
-  image: xoxys/ansible-later:latest
+  image: xoxys/ansible-later
   commands:
   - ansible-later
 
@@ -35,9 +35,8 @@ workspace:
 
 steps:
 - name: molecule
-  image: xoxys/molecule:hcloud-linux-amd64
+  image: xoxys/molecule:3
   commands:
-  - /bin/bash /docker-entrypoint.sh
   - molecule test -s ubuntu1804
   environment:
     HCLOUD_TOKEN:
@@ -71,9 +70,8 @@ workspace:
 
 steps:
 - name: molecule
-  image: xoxys/molecule:hcloud-linux-amd64
+  image: xoxys/molecule:3
   commands:
-  - /bin/bash /docker-entrypoint.sh
   - molecule test -s centos7
   environment:
     HCLOUD_TOKEN:
@@ -100,7 +98,7 @@ platform:
 
 steps:
 - name: generate
-  image: xoxys/ansible-doctor:latest
+  image: xoxys/ansible-doctor
   environment:
     ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
@@ -109,7 +107,7 @@ steps:
     ANSIBLE_DOCTOR_TEMPLATE: hugo-book
 
 - name: publish
-  image: plugins/gh-pages:latest
+  image: plugins/gh-pages
   settings:
     pages_directory: _docs/
     password:
@@ -130,6 +128,9 @@ steps:
     server: https://drone.owncloud.com
     token:
       from_secret: drone_token
+  when:
+    ref:
+    - refs/heads/master
 
 trigger:
   ref:
@@ -174,6 +175,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: b5ec5d061a2ba59758a47457658aaa096fd3ecc4bb8623d9e85692cc3b5d0791
+hmac: db076a57215199e68998140875ae16f0a660e433d26ddcb29c0276294e028915
 
 ...

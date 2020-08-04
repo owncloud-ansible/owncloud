@@ -62,6 +62,7 @@
   loop: "{{ owncloud_packages_extra + __owncloud_packages }}"
   package:
     name: "{{ item }}"
+    update_cache: "{{ owncloud_apt_cache_update }}"
     state: present
 
 - name: Create ownCloud directories

@@ -2,22 +2,15 @@
 dependency:
   name: galaxy
 driver:
-  name: hetznercloud
-lint:
-  name: yamllint
-  enabled: False
+  name: delegated
 platforms:
   - name: ubuntu-18.04-owncloud
     server_type: cx11
     image: ubuntu-18.04
+lint: |
+  flake8
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    enabled: False
 verifier:
   name: testinfra
-  lint:
-    name: flake8
-    options:
-      max-line-length: 120
+

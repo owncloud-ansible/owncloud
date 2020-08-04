@@ -29,7 +29,7 @@ options:
     description:
       - The state of module. 'lateste' only works while installing from the marketplace and is ignored
         if 'from_url' is set.
-    choices: [ absent, latest, present ]
+    choices: [ absent, latest, present, current ]
     default: present
   enabled:
     description:
@@ -110,7 +110,7 @@ def _get_installed_apps(occ, module, chdir):
     err = ''
     out = ''
 
-    cmd = [occ] + ['app:list', '--output', 'json']
+    cmd = [occ] + ['app:list', '--no-warnings', '--output', 'json']
     rc, out_occ, err_occ = module.run_command(cmd, cwd=chdir)
     out += out_occ
     err += err_occ
@@ -224,6 +224,7 @@ def main():
         present=['market:install'],
         absent=['market:uninstall'],
         latest=['market:upgrade'],
+        current=[],
     )
 
     argument_spec = url_argument_spec()
@@ -300,6 +301,9 @@ def main():
         )
 
     if state == 'present' and (name in enabled_apps or name in disabled_apps):
+        skip_install = True
+
+    if state == 'current':
         skip_install = True
 
     if not skip_install:
