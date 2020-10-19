@@ -73,36 +73,26 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   loop:
-    - {
-        path: "{{ owncloud_src_path }}",
-        mode: "0750",
-        owner: "{{ owncloud_app_user }}",
-        group: "{{ owncloud_app_group }}",
-      }
-    - {
-        path: "{{ owncloud_deploy_path }}",
-        mode: "0750",
-        owner: "{{ owncloud_app_user }}",
-        group: "{{ owncloud_app_group }}",
-      }
-    - {
-        path: "{{ owncloud_data_path }}",
-        mode: "0770",
-        owner: "{{ owncloud_app_user }}",
-        group: "{{ owncloud_app_group }}",
-      }
-    - {
-        path: "{{ __owncloud_custom_apps_path }}",
-        mode: "0770",
-        owner: "{{ owncloud_app_user }}",
-        group: "{{ owncloud_app_group }}",
-      }
-    - {
-        path: "{{ owncloud_config_path }}",
-        mode: "0770",
-        owner: "{{ owncloud_app_user }}",
-        group: "{{ owncloud_app_group }}",
-      }
+    - path: "{{ owncloud_src_path }}"
+      mode: "0750"
+      owner: "{{ owncloud_app_user }}"
+      group: "{{ owncloud_app_group }}"
+    - path: "{{ owncloud_deploy_path }}"
+      mode: "0750"
+      owner: "{{ owncloud_app_user }}"
+      group: "{{ owncloud_app_group }}"
+    - path: "{{ owncloud_data_path }}"
+      mode: "0770"
+      owner: "{{ owncloud_app_user }}"
+      group: "{{ owncloud_app_group }}"
+    - path: "{{ __owncloud_custom_apps_path }}"
+      mode: "0770"
+      owner: "{{ owncloud_app_user }}"
+      group: "{{ owncloud_app_group }}"
+    - path: "{{ owncloud_config_path }}"
+      mode: "0770"
+      owner: "{{ owncloud_app_user }}"
+      group: "{{ owncloud_app_group }}"
   loop_control:
     label: "{{ item.path }}"
 

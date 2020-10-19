@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Standards: 0.1
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2019, Robert Kaussow <mail@geeklabor.de>
@@ -7,9 +8,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -58,7 +57,7 @@ requirements:
   - occ
 author:
   - Robert Kaussow (@xoxys)
-'''
+'''  # noqa
 
 EXAMPLES = '''
 # Set password policy.
@@ -79,18 +78,12 @@ tbd
 '''
 
 import os
-import re
-import sys
-import json
 import tempfile
-import operator
-import shlex
-import traceback
 import hashlib
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-from ansible.module_utils.six import PY3
+from ansible.module_utils.basic import AnsibleModule  # noqa
+from ansible.module_utils._text import to_native  # noqa
+from ansible.module_utils.six import PY3  # noqa
 
 
 def _get_state_map(name):
@@ -153,8 +146,10 @@ def _get_occ(module, executable=None):
         else:
             # For-else: Means that we did not break out of the loop
             # (therefore, that occ was not found)
-            module.fail_json(msg='Unable to find any of %s to use. occ'
-                                 ' needs to be installed.' % ', '.join(candidate_occ_basenames))
+            module.fail_json(
+                msg='Unable to find any of %s to use. occ'
+                ' needs to be installed.' % ', '.join(candidate_occ_basenames)
+            )
 
     return occ
 
@@ -162,9 +157,9 @@ def _get_occ(module, executable=None):
 def _fail(module, cmd, out, err):
     msg = ''
     if out:
-        msg += "stdout: %s" % (out, )
+        msg += "stdout: %s" % (out,)
     if err:
-        msg += "\n:stderr: %s" % (err, )
+        msg += "\n:stderr: %s" % (err,)
     module.fail_json(cmd=cmd, msg=msg)
 
 
@@ -176,9 +171,11 @@ def main():
             update_only=dict(type='bool', default=False),
             attribute=dict(type='str'),
             value=dict(type='str'),
-            type=dict(type='str',
-                      choices=['string', 'integer', 'double', 'boolean', 'json'],
-                      default='string'),
+            type=dict(
+                type='str',
+                choices=['string', 'integer', 'double', 'boolean', 'json'],
+                default='string'
+            ),
             chdir=dict(type='path'),
             executable=dict(type='path'),
         ),
@@ -234,8 +231,7 @@ def main():
 
     changed = not _get_hash(before_value) == _get_hash(after_value)
 
-    module.exit_json(changed=changed, cmd=cmd, name=name, state=state,
-                     stdout=out, stderr=err)
+    module.exit_json(changed=changed, cmd=cmd, name=name, state=state, stdout=out, stderr=err)
 
 
 if __name__ == '__main__':

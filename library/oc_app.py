@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Standards: 0.1
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2019, Robert Kaussow <mail@geeklabor.de>
@@ -7,9 +8,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -76,7 +75,7 @@ requirements:
   - occ
 author:
   - Robert Kaussow (@xoxys)
-'''
+''' # noqa
 
 EXAMPLES = '''
 # Install contacts app.
@@ -100,10 +99,10 @@ import shutil
 
 import xml.etree.ElementTree as ET
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-from ansible.module_utils.urls import fetch_url, url_argument_spec
-from ansible.module_utils.six.moves.urllib.parse import urlsplit
+from ansible.module_utils.basic import AnsibleModule  # noqa
+from ansible.module_utils._text import to_native  # noqa
+from ansible.module_utils.urls import fetch_url, url_argument_spec  # noqa
+from ansible.module_utils.six.moves.urllib.parse import urlsplit  # noqa
 
 
 def _get_installed_apps(occ, module, chdir):
@@ -142,8 +141,10 @@ def _get_occ(module, executable=None):
         else:
             # For-else: Means that we did not break out of the loop
             # (therefore, that occ was not found)
-            module.fail_json(msg='Unable to find any of %s to use. occ'
-                                 ' needs to be installed.' % ', '.join(candidate_occ_basenames))
+            module.fail_json(
+                msg='Unable to find any of %s to use. occ'
+                ' needs to be installed.' % ', '.join(candidate_occ_basenames)
+            )
 
     return occ
 
@@ -163,12 +164,17 @@ def url_get(module, url, timeout=10, headers=None):
     if info['status'] == 304:
         module.exit_json(url=url, changed=False, msg=info.get('msg', ''))
 
-    # Exceptions in fetch_url may result in a status -1, the ensures a proper error to the user in all cases
+    # Exceptions in fetch_url may result in a status -1,
+    # the ensures a proper error to the user in all cases
     if info['status'] == -1:
         module.fail_json(msg=info['msg'], url=url)
 
-    if info['status'] != 200 and not url.startswith('file:/') and not (url.startswith('ftp:/') and info.get('msg', '').startswith('OK')):
-        module.fail_json(msg="Request failed", status_code=info['status'], response=info['msg'], url=url)
+    if info['status'] != 200 and not url.startswith('file:/') and not (
+        url.startswith('ftp:/') and info.get('msg', '').startswith('OK')
+    ):
+        module.fail_json(
+            msg="Request failed", status_code=info['status'], response=info['msg'], url=url
+        )
 
     tmp_dest = module.tmpdir
 
@@ -179,7 +185,10 @@ def url_get(module, url, timeout=10, headers=None):
         shutil.copyfileobj(rsp, f)
     except Exception as e:
         os.remove(tempname)
-        module.fail_json(msg="failed to create temporary content file: %s" % to_native(e), exception=traceback.format_exc())
+        module.fail_json(
+            msg="failed to create temporary content file: %s" % to_native(e),
+            exception=traceback.format_exc()
+        )
     f.close()
     rsp.close()
 
@@ -201,7 +210,9 @@ def unarchive(module, src):
         cmd_path = module.get_bin_path('tar')
     try:
         cmd = [cmd_path, '--extract', '-f', src, '--strip-components', '1']
-        rc, out, err = module.run_command(cmd, cwd=dest, environ_update=dict(LANG='C', LC_ALL='C', LC_MESSAGES='C'))
+        rc, out, err = module.run_command(
+            cmd, cwd=dest, environ_update=dict(LANG='C', LC_ALL='C', LC_MESSAGES='C')
+        )
         if rc != 0:
             module.fail_json(msg="failed to unpack %s to %s" % (src, dest))
     except IOError:
@@ -213,9 +224,9 @@ def unarchive(module, src):
 def _fail(module, cmd, out, err):
     msg = ''
     if out:
-        msg += "stdout: %s" % (out, )
+        msg += "stdout: %s" % (out,)
     if err:
-        msg += "\n:stderr: %s" % (err, )
+        msg += "\n:stderr: %s" % (err,)
     module.fail_json(cmd=cmd, msg=msg)
 
 
@@ -250,9 +261,7 @@ def main():
     chdir = module.params['chdir']
     enable = module.params['enabled']
 
-    url_result = dict(
-        url=name,
-    )
+    url_result = dict(url=name,)
 
     if chdir is None:
         # this is done to avoid permissions issues with privilege escalation
@@ -279,7 +288,9 @@ def main():
         # raise an error if there is no tmpsrc file
         if not os.path.exists(tmpsrc):
             os.remove(tmpsrc)
-            module.fail_json(msg="Request failed", status_code=info['status'], response=info['msg'])
+            module.fail_json(
+                msg="Request failed", status_code=info['status'], response=info['msg']
+            )
         if not os.access(tmpsrc, os.R_OK):
             os.remove(tmpsrc)
             module.fail_json(msg="Source %s is not readable" % (tmpsrc))
@@ -347,8 +358,7 @@ def main():
     # if os.path.isdir(appinfo):
     #     shutil.rmtree(appinfo)
 
-    module.exit_json(changed=changed, cmd=cmd, name=name, state=state,
-                     stdout=out, stderr=err)
+    module.exit_json(changed=changed, cmd=cmd, name=name, state=state, stdout=out, stderr=err)
 
 
 if __name__ == '__main__':
