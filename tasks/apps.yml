@@ -58,5 +58,3 @@
     - owncloud_encryption_enabled | bool
   become: True
   become_user: "{{ owncloud_app_user }}"
-
-...

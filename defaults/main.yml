@@ -30,11 +30,11 @@ owncloud_autosetup: True
 owncloud_admin_username: admin
 owncloud_admin_password: owncloud
 
-owncloud_system_user: 'owncloud'
-owncloud_system_group: 'owncloud'
-owncloud_system_user_home: '/var/local/{{ owncloud_system_user }}'
-owncloud_system_user_shell: '/usr/sbin/nologin'
-owncloud_system_user_comment: 'Owncloud Application Manager'
+owncloud_system_user: "owncloud"
+owncloud_system_group: "owncloud"
+owncloud_system_user_home: "/var/local/{{ owncloud_system_user }}"
+owncloud_system_user_shell: "/usr/sbin/nologin"
+owncloud_system_user_comment: "Owncloud Application Manager"
 
 owncloud_app_group: "{{ owncloud_system_group }}"
 owncloud_occ_executable: /usr/local/bin/occ
@@ -180,7 +180,7 @@ owncloud_cron_backend: cron
 owncloud_cron_jobs:
   - name: oc cron
     job: "{{ owncloud_occ_executable }} system:cron"
-    minute: '*/15'
+    minute: "*/15"
 
 # owncloud_imprint_url: example.com/impressum # defaults to not set
 # owncloud_privacy_policy_url: example.com/impressum # defaults to not set
@@ -217,5 +217,3 @@ owncloud_apps_config: []
 # @end
 owncloud_encryption_enabled: False
 owncloud_encryption_force_encrypt_all: False
-
-...

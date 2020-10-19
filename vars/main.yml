@@ -19,9 +19,9 @@ __owncloud_custom_apps_path: "{{ owncloud_src_path }}/custom"
 
 __owncloud_role_config:
   trusted_domains: "{{ owncloud_trusted_domains }}"
-  'overwrite.cli.url': "{{ owncloud_overwrite_cli_url | default(owncloud_fqdn) }}"
+  "overwrite.cli.url": "{{ owncloud_overwrite_cli_url | default(owncloud_fqdn) }}"
 
-  'cors.allowed-domains':
+  "cors.allowed-domains":
     state: '{{ "present" if owncloud_cors_allowed_domains else "absent" }}'
     value: "{{ owncloud_cors_allowed_domains }}"
 
@@ -57,7 +57,7 @@ __owncloud_role_config:
     state: '{{ "present" if owncloud_enterprise_license_key is defined else "absent" }}'
     value: '{{ owncloud_enterprise_license_key | default("") }}'
 
-  default_language: '{{ owncloud_web_default_language }}'
+  default_language: "{{ owncloud_web_default_language }}"
 
   log_type: "{{ owncloud_log_type }}"
   logfile: "{{ owncloud_log_file }}"
@@ -78,7 +78,7 @@ __owncloud_role_config:
   "accounts.enable_medial_search": "{{ owncloud_medial_search_accounts_enabled }}"
   "user.search_min_length": "{{ owncloud_search_min_length }}"
 
-  'integrity.ignore.missing.app.signature':
+  "integrity.ignore.missing.app.signature":
     state: '{{ "present" if owncloud_integrity_ignore_missing_app_signature else "absent" }}'
     value: "{{ owncloud_integrity_ignore_missing_app_signature }}"
 
@@ -91,7 +91,7 @@ __owncloud_role_config:
     state: '{{ "present" if owncloud_login_alternatives else "absent" }}'
     value: "{{ owncloud_login_alternatives }}"
 
-  'csrf.disabled': "{{ not owncloud_csrf_enabled }}"
+  "csrf.disabled": "{{ not owncloud_csrf_enabled }}"
 
   skeletondirectory: "{{ owncloud_skeleton_path }}"
 
@@ -332,5 +332,3 @@ __owncloud_fs_perm_fix:
     group: "{{ owncloud_app_group }}"
     mode: "0640"
     state: file
-
-...

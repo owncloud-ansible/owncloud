@@ -8,5 +8,3 @@
   set_fact:
     owncloud_python_executable: "{{ __owncloud_python_executable }}"
   when: owncloud_python_executable is not defined
-
-...
