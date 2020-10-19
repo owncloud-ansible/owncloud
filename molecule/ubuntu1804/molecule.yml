@@ -1,6 +1,10 @@
 ---
 dependency:
   name: galaxy
+  options:
+    role-file: molecule/requirements.yml
+  env:
+    ANSIBLE_GALAXY_DISPLAY_PROGRESS: "false"
 driver:
   name: delegated
 platforms:
@@ -8,9 +12,11 @@ platforms:
     server_type: cx11
     image: ubuntu-18.04
 lint: |
-  flake8
+  /usr/local/bin/flake8
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_FILTER_PLUGINS: ${ANSIBLE_FILTER_PLUGINS:-./plugins/filter}
+    ANSIBLE_LIBRARY: ${ANSIBLE_LIBRARY:-./library}
 verifier:
   name: testinfra
-

@@ -65,7 +65,7 @@
         owner: "{{ owncloud_app_user }}"
         group: "{{ owncloud_app_group }}"
         extra_opts:
-          - '--strip-components=1'
+          - "--strip-components=1"
   when:
     - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
     - owncloud_install_from_filesystem | bool
@@ -132,9 +132,9 @@
 - name: Determine if ownCloud autosetup should be done
   set_fact:
     owncloud_do_autosetup: '{{ (owncloud_autosetup and
-                                 owncloud_admin_username is defined and
-                                 (not __owncloud_register_occ_check is skipped) and
-                                 "is not installed" in __owncloud_register_occ_check.stdout) }}'
+      owncloud_admin_username is defined and
+      (not __owncloud_register_occ_check is skipped) and
+      "is not installed" in __owncloud_register_occ_check.stdout) }}'
 
 - name: Automatically finish setup via the occ tool
   register: __owncloud_register_occ_install
@@ -168,5 +168,3 @@
     - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
   become: True
   become_user: "{{ owncloud_app_user }}"
-
-...

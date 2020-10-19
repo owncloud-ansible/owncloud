@@ -10,7 +10,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_owncloud_running_services(host):
     assert host.service("httpd24-httpd").is_running
     assert host.service("rh-mariadb101-mariadb").is_running
-    assert host.service("redis").is_running
+    assert host.service("rh-redis5-redis").is_running
 
 
 def test_owncloud_network(host):
@@ -18,7 +18,9 @@ def test_owncloud_network(host):
 
 
 def test_owncloud_web(host):
-    code = int(host.run("curl -s -w '%{http_code}' http://localhost/index.php/login -o /dev/null").stdout)
+    code = int(
+        host.run("curl -s -w '%{http_code}' http://localhost/index.php/login -o /dev/null").stdout
+    )
     body = host.run("curl -sX GET http://localhost/index.php/login").stdout
 
     assert code == 200

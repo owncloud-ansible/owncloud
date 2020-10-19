@@ -33,5 +33,3 @@
   loop: "{{ owncloud_cron_jobs }}"
   loop_control:
     label: "{{ item.name }}"
-
-...

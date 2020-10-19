@@ -26,5 +26,3 @@
 - include_tasks: config.yml
 - include_tasks: post.yml
 - include_tasks: apps.yml
-
-...
