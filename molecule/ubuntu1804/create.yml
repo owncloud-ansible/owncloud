@@ -57,13 +57,15 @@
 
     - name: Populate instance config dict
       set_fact:
-        instance_conf_dict: {
-          'instance': "{{ item.hcloud_server.name }}",
-          'ssh_key_name': "{{ ssh_key_name }}",
-          'address': "{{ item.hcloud_server.ipv4_address }}",
-          'user': "{{ ssh_user }}",
-          'port': "{{ ssh_port }}",
-          'identity_file': "{{ ssh_path }}", }
+        instance_conf_dict:
+          {
+            "instance": "{{ item.hcloud_server.name }}",
+            "ssh_key_name": "{{ ssh_key_name }}",
+            "address": "{{ item.hcloud_server.ipv4_address }}",
+            "user": "{{ ssh_user }}",
+            "port": "{{ ssh_port }}",
+            "identity_file": "{{ ssh_path }}",
+          }
       with_items: "{{ hetzner_jobs.results }}"
       register: instance_config_dict
       when: server.changed | bool
@@ -75,7 +77,10 @@
 
     - name: Dump instance config
       copy:
-        content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+        content: |
+          # Molecule managed
+
+          {{ instance_conf | to_json | from_json | to_yaml }}
         dest: "{{ molecule_instance_config }}"
       when: server.changed | bool
 
@@ -85,7 +90,7 @@
         host: "{{ item.address }}"
         search_regex: SSH
         delay: 10
-      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
+      with_items: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
 
     - name: Wait for VM to settle down
       pause:
