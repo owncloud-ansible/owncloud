@@ -33,7 +33,6 @@
         server_type: "{{ item.server_type }}"
         ssh_keys:
           - "{{ ssh_key_name }}"
-        volumes: "{{ item.volumes | default(omit) }}"
         image: "{{ item.image }}"
         location: "{{ item.location | default(omit) }}"
         datacenter: "{{ item.datacenter | default(omit) }}"
@@ -41,7 +40,7 @@
         api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
         state: present
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
       async: 7200
       poll: 0
 
@@ -51,7 +50,30 @@
       register: hetzner_jobs
       until: hetzner_jobs.finished
       retries: 300
-      with_items: "{{ server.results }}"
+      loop: "{{ server.results }}"
+
+    - name: Create volume(s)
+      hcloud_volume:
+        name: "{{ item.name }}"
+        server: "{{ item.name }}"
+        location: "{{ item.location | default(omit) }}"
+        size: "{{ item.volume_size | default(10) }}"
+        api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
+        state: "present"
+      loop: "{{ molecule_yml.platforms }}"
+      when: item.volume | default(False) | bool
+      register: volumes
+      async: 7200
+      poll: 0
+
+    - name: Wait for volume(s) creation to complete
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: hetzner_volumes
+      until: hetzner_volumes.finished
+      retries: 300
+      when: volumes.changed
+      loop: "{{ volumes.results }}"
 
     # Mandatory configuration for Molecule to function.
 
@@ -65,8 +87,10 @@
             "user": "{{ ssh_user }}",
             "port": "{{ ssh_port }}",
             "identity_file": "{{ ssh_path }}",
+            "volume": "{{ item.item.item.volume | default(False) | bool }}",
+            "from_snapshot": "{{ item.item.item.from_snapshot | default(False) | bool }}",
           }
-      with_items: "{{ hetzner_jobs.results }}"
+      loop: "{{ hetzner_jobs.results }}"
       register: instance_config_dict
       when: server.changed | bool
 
@@ -90,7 +114,7 @@
         host: "{{ item.address }}"
         search_regex: SSH
         delay: 10
-      with_items: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
+      loop: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
 
     - name: Wait for VM to settle down
       pause:
