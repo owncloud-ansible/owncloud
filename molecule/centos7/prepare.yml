@@ -3,6 +3,9 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Wait for apt lock
-      shell: while fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do echo 'Waiting for apt list lock.' && sleep 10; done
-      changed_when: False
+    - name: Prepare instance(s) from snapshot
+      include_tasks: from_snapshot.yml
+      loop: "{{ instance_conf }}"
+      when:
+        - inventory_hostname == item.instance
+        - item.from_snapshot | bool
