@@ -45,6 +45,9 @@ labels:
   - name: wontfix
     color: ffffff
     description: This will not be worked on
+  - name: needs triage
+    color: 8eb726
+    description: Needs to be verified by a maintainer
 
 branches:
   - name: master
