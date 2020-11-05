@@ -70,6 +70,7 @@ Ansible role to setup an ownCloud server. Currently, only a single ownCloud serv
   * [owncloud_search_min_length](#owncloud_search_min_length)
   * [owncloud_session_keepalive_enabled](#owncloud_session_keepalive_enabled)
   * [owncloud_session_lifetime](#owncloud_session_lifetime)
+  * [owncloud_setup_run_once](#owncloud_setup_run_once)
   * [owncloud_share_api_allow_group_sharing](#owncloud_share_api_allow_group_sharing)
   * [owncloud_share_api_allow_links](#owncloud_share_api_allow_links)
   * [owncloud_share_api_allow_mail_notification](#owncloud_share_api_allow_mail_notification)
@@ -634,6 +635,16 @@ owncloud_session_keepalive_enabled: true
 
 ```YAML
 owncloud_session_lifetime: 86400
+```
+
+### owncloud_setup_run_once
+
+Run the occ setup command only once on the first host of the group. This setting is only required for cluster setups. If you want to install multiple standalone instances with the same play set it to `False`.
+
+#### Default value
+
+```YAML
+owncloud_setup_run_once: true
 ```
 
 ### owncloud_share_api_allow_group_sharing
