@@ -154,7 +154,7 @@
     "--admin-user={{ owncloud_admin_username }}"
     "--admin-pass={{ owncloud_admin_password }}"
     {% endif %}
-  run_once: True
+  run_once: "{{ owncloud_setup_run_once | bool }}"
   become: True
   become_user: "{{ owncloud_app_user }}"
 
