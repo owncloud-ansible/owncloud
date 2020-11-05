@@ -27,6 +27,11 @@ owncloud_apt_cache_update: False
 owncloud_packages_extra: []
 
 owncloud_autosetup: True
+# @var owncloud_setup_run_once:description: >
+# Run the occ setup command only once on the first host of the group. This setting is only required for
+# cluster setups. If you want to install multiple standalone instances with the same play set it to `False`.
+# @end
+owncloud_setup_run_once: True
 owncloud_admin_username: admin
 owncloud_admin_password: owncloud
 
