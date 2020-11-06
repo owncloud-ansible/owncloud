@@ -28,7 +28,7 @@ def test_owncloud_web(host):
 
 
 def test_owncloud_cli(host):
-    status = host.run("occ status | tr -d ' '").stdout
+    status = host.run("/usr/local/bin/occ status | tr -d ' '").stdout
 
-    assert "versionstring:10.4.1" in status
+    assert "versionstring:10.5.0" in status
     assert "installed:true" in status
