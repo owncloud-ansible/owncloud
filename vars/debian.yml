@@ -1,3 +1,4 @@
 ---
 __owncloud_python_executable: "python3"
 __owncloud_app_user: "www-data"
+__owncloud_deploy_path: "/var/www/owncloud"

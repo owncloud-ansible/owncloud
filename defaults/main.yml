@@ -54,7 +54,11 @@ owncloud_redis_enabled: True
 owncloud_redis_host: "127.0.0.1"
 owncloud_redis_port: 6379
 
-owncloud_deploy_path: /var/www/owncloud
+# @ var owncloud_deploy_path:description: >
+# Path into where the owncloud files are going to be installed. Your apache vhosts directory should use it.
+# Default paths defined in vars/<ansible os family>.yml
+# @end
+#owncloud_deploy_path: 
 owncloud_src_path: "/usr/local/src/{{ owncloud_system_user }}"
 owncloud_data_path: "{{ owncloud_src_path }}/data"
 owncloud_config_path: "{{ owncloud_src_path }}/config"
