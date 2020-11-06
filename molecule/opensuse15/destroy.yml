@@ -1,0 +1,78 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: "{{ molecule_no_log }}"
+  tasks:
+    - name: Check existing instance config file
+      stat:
+        path: "{{ molecule_instance_config }}"
+      register: cfg
+
+    - name: Populate the instance config
+      set_fact:
+        instance_conf: "{{ (lookup('file', molecule_instance_config) | from_yaml) if cfg.stat.exists else [] }}"
+
+    - name: Destroy molecule instance(s)
+      hcloud_server:
+        name: "{{ item.instance }}"
+        api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
+        state: absent
+      register: server
+      loop: "{{ instance_conf }}"
+      async: 7200
+      poll: 0
+
+    - name: Wait for instance(s) deletion to complete
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: hetzner_jobs
+      until: hetzner_jobs.finished
+      retries: 300
+      loop: "{{ server.results }}"
+
+    - pause:
+        seconds: 5
+
+    - name: Destroy volume(s)
+      hcloud_volume:
+        name: "{{ item.instance }}"
+        server: "{{ item.instance }}"
+        api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
+        state: "absent"
+      register: volumes
+      loop: "{{ instance_conf }}"
+      when: item.volume | default(False) | bool
+      async: 7200
+      poll: 0
+
+    - name: Wait for volume(s) deletion to complete
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: hetzner_volumes
+      until: hetzner_volumes.finished
+      retries: 300
+      when: volumes.changed
+      loop: "{{ volumes.results }}"
+
+    - name: Remove registered SSH key
+      hcloud_ssh_key:
+        name: "{{ instance_conf[0].ssh_key_name }}"
+        state: absent
+      when: (instance_conf | default([])) | length > 0
+
+    # Mandatory configuration for Molecule to function.
+
+    - name: Populate instance config
+      set_fact:
+        instance_conf: {}
+
+    - name: Dump instance config
+      copy:
+        content: |
+          # Molecule managed
+
+          {{ instance_conf | to_json | from_json | to_yaml }}
+        dest: "{{ molecule_instance_config }}"
+      when: server.changed | bool

@@ -1,0 +1,20 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    mariadb_apt_cache_update: True
+    redis_apt_cache_update: True
+    apache_apt_cache_update: True
+    php_default_version: "7.2"
+    php_apt_cache_update: True
+    owncloud_apt_cache_update: True
+    owncloud_trusted_domains:
+      - "{{ owncloud_fqdn }}"
+      - "{{ ansible_default_ipv4.address }}"
+
+  roles:
+    - role: mariadb
+    - role: redis
+    - role: apache
+    - role: php
+    - role: owncloud
