@@ -10,7 +10,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_owncloud_running_services(host):
     assert host.service("apache2").is_running
     assert host.service("mariadb").is_running
-    assert host.service("redis-server").is_running
+    assert host.service("redis@default").is_running
 
 
 def test_owncloud_network(host):
