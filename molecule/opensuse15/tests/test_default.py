@@ -10,7 +10,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_owncloud_running_services(host):
     assert host.service("apache2").is_running
     assert host.service("mariadb").is_running
-    assert host.service("redis-server").is_running
+    assert host.service("redis@default").is_running
 
 
 def test_owncloud_network(host):
@@ -28,7 +28,7 @@ def test_owncloud_web(host):
 
 
 def test_owncloud_cli(host):
-    status = host.run("occ status | tr -d ' '").stdout
+    status = host.run("/usr/local/bin/occ status | tr -d ' '").stdout
 
     assert "versionstring:10.5.0" in status
     assert "installed:true" in status

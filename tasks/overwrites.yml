@@ -8,3 +8,8 @@
   set_fact:
     owncloud_python_executable: "{{ __owncloud_python_executable }}"
   when: owncloud_python_executable is not defined
+ 
+- name: Define owncloud_deploy_path
+  set_fact:
+    owncloud_deploy_path: "{{ __owncloud_deploy_path }}"
+  when: owncloud_deploy_path is not defined

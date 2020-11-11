@@ -90,6 +90,41 @@ depends_on:
 
 ---
 kind: pipeline
+name: testing-opensuse15
+
+platform:
+  os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
+workspace:
+  base: /drone/src
+  path: owncloud
+
+steps:
+- name: molecule
+  image: xoxys/molecule:3
+  commands:
+  - molecule test -s opensuse15
+  environment:
+    HCLOUD_TOKEN:
+      from_secret: hcloud_token
+    PY_COLORS: 1
+    USER: root
+
+trigger:
+  ref:
+  - refs/heads/master
+  - refs/tags/**
+  - refs/pull/**
+
+depends_on:
+- linting
+
+---
+kind: pipeline
 name: documentation
 
 platform:
@@ -141,6 +176,7 @@ trigger:
 depends_on:
 - testing-ubuntu1804
 - testing-centos7
+- testing-opensuse15
 
 ---
 kind: pipeline
@@ -171,10 +207,11 @@ depends_on:
 - linting
 - testing-ubuntu1804
 - testing-centos7
+- testing-opensuse15
 - documentation
 
 ---
 kind: signature
-hmac: db076a57215199e68998140875ae16f0a660e433d26ddcb29c0276294e028915
+hmac: b101b39c43738b1814155698e66293999ebe0986c7f154777bf428d4db6d784d
 
 ...
