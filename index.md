@@ -36,7 +36,6 @@ Ansible role to setup an ownCloud server. Currently, only a single ownCloud serv
   * [owncloud_db_type](#owncloud_db_type)
   * [owncloud_db_user](#owncloud_db_user)
   * [owncloud_default_app](#owncloud_default_app)
-  * [owncloud_deploy_path](#owncloud_deploy_path)
   * [owncloud_download_url](#owncloud_download_url)
   * [owncloud_enable_avatars](#owncloud_enable_avatars)
   * [owncloud_encryption_enabled](#owncloud_encryption_enabled)
@@ -349,14 +348,6 @@ owncloud_db_user: owncloud
 
 ```YAML
 owncloud_default_app: files
-```
-
-### owncloud_deploy_path
-
-#### Default value
-
-```YAML
-owncloud_deploy_path: /var/www/owncloud
 ```
 
 ### owncloud_download_url
@@ -918,7 +909,7 @@ owncloud_upgrade_migration_test: true
 #### Default value
 
 ```YAML
-owncloud_version: 10.4.1
+owncloud_version: 10.5.0
 ```
 
 ### owncloud_version_hide
