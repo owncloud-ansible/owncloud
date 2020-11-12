@@ -58,7 +58,7 @@ owncloud_redis_port: 6379
 # Path into where the owncloud files are going to be installed. Your apache vhosts directory should use it.
 # Default paths defined in vars/<ansible os family>.yml
 # @end
-#owncloud_deploy_path: 
+#owncloud_deploy_path:
 owncloud_src_path: "/usr/local/src/{{ owncloud_system_user }}"
 owncloud_data_path: "{{ owncloud_src_path }}/data"
 owncloud_config_path: "{{ owncloud_src_path }}/config"
@@ -108,7 +108,7 @@ owncloud_mail_smtp_auth_enabled: False
 # owncloud_mail_smtp_auth_password: "very_secure" # defaults to not set
 
 # owncloud_password_min_lowercase:
-# owncloud_password_min_lenght:
+# owncloud_password_min_length:
 # owncloud_password_min_numbers:
 # owncloud_password_min_special_chars:
 # owncloud_password_allowed_special_chars:

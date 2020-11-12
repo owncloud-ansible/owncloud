@@ -286,11 +286,11 @@ __occ_core_config:
   - name: password_policy
     attr: spv_min_chars_checked
     value: "on"
-    state: "{{ 'present' if owncloud_password_min_lenght is defined else 'absent' }}"
+    state: "{{ 'present' if owncloud_password_min_length is defined else 'absent' }}"
   - name: password_policy
     attr: spv_min_chars_value
-    value: "{{ owncloud_password_min_lenght | default('') }}"
-    state: "{{ 'present' if owncloud_password_min_lenght is defined else 'absent' }}"
+    value: "{{ owncloud_password_min_length | default('') }}"
+    state: "{{ 'present' if owncloud_password_min_length is defined else 'absent' }}"
   - name: password_policy
     attr: spv_numbers_checked
     value: "on"
