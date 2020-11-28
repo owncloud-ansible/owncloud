@@ -8,7 +8,7 @@ local PipelineLinting = {
   steps: [
     {
       name: 'later',
-      image: 'xoxys/ansible-later',
+      image: 'thegeeklab/ansible-later',
       commands: [
         'ansible-later',
       ],
@@ -36,7 +36,7 @@ local PipelineTesting(scenario='ubuntu1804') = {
   steps: [
     {
       name: 'molecule',
-      image: 'xoxys/molecule:3',
+      image: 'thegeeklab/molecule:3',
       environment: {
         HCLOUD_TOKEN: { from_secret: 'hcloud_token' },
         USER: 'root',
@@ -65,7 +65,7 @@ local PipelineDocumentation = {
   steps: [
     {
       name: 'generate',
-      image: 'xoxys/ansible-doctor',
+      image: 'thegeeklab/ansible-doctor',
       environment: {
         ANSIBLE_DOCTOR_LOG_LEVEL: 'INFO',
         ANSIBLE_DOCTOR_FORCE_OVERWRITE: true,
