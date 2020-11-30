@@ -12,5 +12,5 @@ cd {{ owncloud_deploy_path }} || exit 1
 if [ "$USER" == "{{ owncloud_app_user }}" ]; then
 	{{ php_executable }} {{ owncloud_deploy_path }}/occ "$@"
 else
-	sudo -E -u {{ owncloud_app_user }} {{ php_executable }} {{ owncloud_deploy_path }} "$@"
+	sudo -E -u {{ owncloud_app_user }} {{ php_executable }} {{ owncloud_deploy_path }}/occ "$@"
 fi
