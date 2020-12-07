@@ -1,0 +1,35 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check existing instance config file
+      stat:
+        path: "{{ molecule_instance_config }}"
+      register: cfg
+      delegate_to: localhost
+      run_once: true
+
+    - name: Populate the instance config
+      set_fact:
+        instance_conf: "{{ (lookup('file', molecule_instance_config) | from_yaml) if cfg.stat.exists else [] }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Prepare instance(s) from snapshot
+      include_tasks: from_snapshot.yml
+      loop: "{{ instance_conf }}"
+      when:
+        - inventory_hostname == item.instance
+        - item.from_snapshot | bool
+
+    - name: Bootstrap python for Ansible
+      raw: |
+        command -v python3 python || (
+        (test -e /usr/bin/dnf && sudo dnf install -y python3) ||
+        (test -e /usr/bin/apt && (apt -y update && apt install -y python-minimal)) ||
+        (test -e /usr/bin/yum && sudo yum -y -qq install python3) ||
+        echo "Warning: Python not boostrapped due to unknown platform."
+        )
+      become: true
+      changed_when: false
