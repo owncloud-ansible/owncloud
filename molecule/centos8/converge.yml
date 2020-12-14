@@ -3,10 +3,8 @@
   hosts: all
   vars:
     mariadb_packages_extra:
-      - epel-release
-      - centos-release-scl
       - gcc
-    php_default_version: "7.3"
+      - make
     owncloud_trusted_domains:
       - "{{ owncloud_fqdn }}"
       - "{{ ansible_default_ipv4.address }}"
