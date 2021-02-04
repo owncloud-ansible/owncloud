@@ -19,5 +19,6 @@ provisioner:
   env:
     ANSIBLE_FILTER_PLUGINS: ${ANSIBLE_FILTER_PLUGINS:-./plugins/filter}
     ANSIBLE_LIBRARY: ${ANSIBLE_LIBRARY:-./library}
+  log: False
 verifier:
   name: testinfra
