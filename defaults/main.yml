@@ -190,6 +190,10 @@ owncloud_cron_jobs:
   - name: oc cron
     job: "{{ owncloud_occ_executable }} system:cron"
     minute: "*/15"
+  - name: occ cleanup chunks
+    job: "{{ owncloud_occ_executable }} dav:cleanup-chunks"
+    minute: "0"
+    hour: "2"
 
 # owncloud_imprint_url: example.com/impressum # defaults to not set
 # owncloud_privacy_policy_url: example.com/impressum # defaults to not set
