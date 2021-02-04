@@ -11,12 +11,14 @@
       run_once: true
 
     - name: Populate the instance config
+      no_log: "{{ molecule_no_log }}"
       set_fact:
         instance_conf: "{{ (lookup('file', molecule_instance_config) | from_yaml) if cfg.stat.exists else [] }}"
       delegate_to: localhost
       run_once: true
 
     - name: Prepare instance(s) from snapshot
+      no_log: "{{ molecule_no_log }}"
       include_tasks: from_snapshot.yml
       loop: "{{ instance_conf }}"
       when:
