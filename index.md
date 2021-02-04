@@ -274,6 +274,10 @@ owncloud_cron_jobs:
   - name: oc cron
     job: '{{ owncloud_occ_executable }} system:cron'
     minute: '*/15'
+  - name: occ cleanup chunks
+    job: '{{ owncloud_occ_executable }} dav:cleanup-chunks'
+    minute: '0'
+    hour: '2'
 ```
 
 ### owncloud_csrf_enabled
