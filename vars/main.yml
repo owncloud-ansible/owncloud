@@ -112,77 +112,77 @@ __occ_core_config:
     state: "{{ 'present' if owncloud_privacy_policy_url is defined else 'absent' }}"
   - name: core
     attr: "shareapi_enabled"
-    value: "{{ 'yes' if owncloud_share_api_enabled | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_enabled is defined else 'no' }}"
   - name: core
     attr: "shareapi_allow_links"
-    value: "{{ 'yes' if owncloud_share_api_allow_links | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_links is defined else 'no' }}"
   - name: core
     attr: "shareapi_allow_public_upload"
-    value: "{{ 'yes' if owncloud_share_api_allow_public_upload | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_public_upload is defined else 'no' }}"
   - name: core
     attr: "shareapi_enforce_links_password_read_only"
-    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_read_only | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_read_only is defined else 'no' }}"
   - name: core
     attr: "shareapi_enforce_links_password_read_write"
-    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_read_write | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_read_write is defined else 'no' }}"
   - name: core
     attr: "shareapi_enforce_links_password_write_only"
-    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_write_only | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_enforce_password_links_write_only is defined else 'no' }}"
   - name: core
     attr: "shareapi_default_expire_date"
-    value: "{{ 'yes' if owncloud_share_api_default_expire_date | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_default_expire_date is defined else 'no' }}"
   - name: core
     attr: "shareapi_enforce_expire_date"
-    value: "{{ 'yes' if owncloud_share_api_enforce_expire_date | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_enforce_expire_date is defined else 'no' }}"
   - name: core
     attr: "shareapi_expire_after_n_days"
-    value: "{{ owncloud_share_api_expire_after_n_days }}"
+    value: "{{ owncloud_share_api_expire_after_n_days | default('') }}"
   - name: core
     attr: "shareapi_allow_public_notification"
-    value: "{{ 'yes' if owncloud_share_api_allow_public_notification | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_public_notification is defined else 'no' }}"
   - name: core
     attr: "shareapi_public_notification_lang"
     value: "{{ owncloud_share_api_public_notification_language | default('') }}"
     state: "{{ 'present' if owncloud_share_api_public_notification_language is defined else 'absent' }}"
   - name: core
     attr: "shareapi_allow_social_share"
-    value: "{{ 'yes' if owncloud_share_api_allow_social_share | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_social_share is defined else 'no' }}"
   - name: core
     attr: "shareapi_auto_accept_share"
-    value: "{{ 'yes' if owncloud_share_api_auto_accept_share | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_auto_accept_share is defined else 'no' }}"
   - name: core
     attr: "shareapi_allow_resharing"
-    value: "{{ 'yes' if owncloud_share_api_allow_resharing | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_resharing is defined else 'no' }}"
   - name: core
     attr: "shareapi_allow_group_sharing"
-    value: "{{ 'yes' if owncloud_share_api_allow_group_sharing | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_group_sharing is defined else 'no' }}"
   - name: core
     attr: "shareapi_only_share_with_group_members"
-    value: "{{ 'yes' if owncloud_share_api_only_share_with_group_members | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_only_share_with_group_members is defined else 'no' }}"
   - name: core
     attr: "shareapi_only_share_with_membership_groups"
-    value: "{{ 'yes' if owncloud_share_api_only_share_with_membership_groups | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_only_share_with_membership_groups is defined else 'no' }}"
   - name: core
     attr: "shareapi_allow_mail_notification"
-    value: "{{ 'yes' if owncloud_share_api_allow_mail_notification | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_mail_notification is defined else 'no' }}"
   - name: core
     attr: "shareapi_allow_share_dialog_user_enumeration"
-    value: "{{ 'yes' if owncloud_share_api_allow_share_dialog_user_enumeration | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_allow_share_dialog_user_enumeration is defined else 'no' }}"
   - name: core
     attr: "shareapi_share_dialog_user_enumeration_group_members"
-    value: "{{ 'yes' if owncloud_share_api_share_dialog_user_enumeration_group_members | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_share_api_share_dialog_user_enumeration_group_members is defined else 'no' }}"
   - name: federation
     attr: "autoAddServers"
-    value: "{{ '1' if owncloud_federation_auto_add_servers | bool else '0' }}"
+    value: "{{ '1' if owncloud_federation_auto_add_servers is defined else '0' }}"
   - name: federatedfilesharing
     attr: "auto_accept_trusted"
-    value: "{{ 'yes' if owncloud_federation_auto_accept_trusted | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_federation_auto_accept_trusted is defined else 'no' }}"
   - name: files_sharing
     attr: "outgoing_server2server_share_enabled"
-    value: "{{ 'yes' if owncloud_federation_allow_outgoing_server2server_share | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_federation_allow_outgoing_server2server_share is defined else 'no' }}"
   - name: files_sharing
     attr: "incoming_server2server_share_enabled"
-    value: "{{ 'yes' if owncloud_federation_allow_incoming_server2server_share | bool else 'no' }}"
+    value: "{{ 'yes' if owncloud_federation_allow_incoming_server2server_share is defined else 'no' }}"
   - name: system
     attr: mail_domain
     value: "{{ owncloud_mail_domain | default('') }}"
@@ -209,7 +209,7 @@ __occ_core_config:
     state: '{{ "present" if owncloud_mail_smtp_secure is defined else "absent" }}'
   - name: system
     attr: mail_smtpauth
-    value: "{{ '1' if owncloud_mail_smtp_auth_enabled else '' }}"
+    value: "{{ '1' if owncloud_mail_smtp_auth_enabled is defined else '0' }}"
     state: '{{ "present" if owncloud_mail_smtp_auth_enabled is defined else "absent" }}'
   - name: system
     attr: mail_smtpauthtype
@@ -266,7 +266,7 @@ __occ_core_config:
   - name: password_policy
     attr: spv_user_password_force_change_on_first_login_checked
     value: "on"
-    state: "{{ 'present' if owncloud_password_force_change_on_first_login else 'absent' }}"
+    state: "{{ 'present' if owncloud_password_force_change_on_first_login is defined else 'absent' }}"
   - name: password_policy
     attr: spv_def_special_chars_checked
     value: "on"

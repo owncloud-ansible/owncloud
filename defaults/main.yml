@@ -70,7 +70,7 @@ owncloud_skeleton_path: "{{ owncloud_deploy_path }}/core/skeleton"
 # limited to owncloud user/group
 # owncloud_temp_path: # defaults to not set
 
-# owncloud_share_api_enabled: True
+owncloud_share_api_enabled: True
 # owncloud_share_api_allow_links: True
 # owncloud_share_api_allow_public_upload: True
 # owncloud_share_api_enforce_password_links_read_only: False
@@ -215,6 +215,7 @@ owncloud_apps_deprecated: []
 #     force_basic_auth: true
 #     state: present
 # @end
+owncloud_apps: []
 
 # owncloud_app_documents_provider: onlyoffice
 # owncloud_app_documents_enabled: False
