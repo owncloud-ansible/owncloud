@@ -1,5 +1,5 @@
 ---
-owncloud_version: "10.5.0"
+owncloud_version: "10.7.0"
 
 # @var owncloud_download_url:description: >
 # You can set a custom download url especialy for the enterprise version.
@@ -70,31 +70,31 @@ owncloud_skeleton_path: "{{ owncloud_deploy_path }}/core/skeleton"
 # limited to owncloud user/group
 # owncloud_temp_path: # defaults to not set
 
-owncloud_share_api_enabled: True
-owncloud_share_api_allow_links: True
-owncloud_share_api_allow_public_upload: True
-owncloud_share_api_enforce_password_links_read_only: False
-owncloud_share_api_enforce_password_links_read_write: False
-owncloud_share_api_enforce_password_links_write_only: False
-owncloud_share_api_default_expire_date: True
-owncloud_share_api_enforce_expire_date: False
-owncloud_share_api_expire_after_n_days: 7
-owncloud_share_api_allow_public_notification: False
+# owncloud_share_api_enabled: True
+# owncloud_share_api_allow_links: True
+# owncloud_share_api_allow_public_upload: True
+# owncloud_share_api_enforce_password_links_read_only: False
+# owncloud_share_api_enforce_password_links_read_write: False
+# owncloud_share_api_enforce_password_links_write_only: False
+# owncloud_share_api_default_expire_date: True
+# owncloud_share_api_enforce_expire_date: False
+# owncloud_share_api_expire_after_n_days: 7
+# owncloud_share_api_allow_public_notification: False
 # owncloud_share_api_public_notification_language: en # defaults to not set
-owncloud_share_api_allow_social_share: True
-owncloud_share_api_auto_accept_share: False
-owncloud_share_api_allow_resharing: False
-owncloud_share_api_allow_group_sharing: False
-owncloud_share_api_only_share_with_group_members: True
-owncloud_share_api_only_share_with_membership_groups: True
-owncloud_share_api_allow_mail_notification: True
-owncloud_share_api_allow_share_dialog_user_enumeration: True
-owncloud_share_api_share_dialog_user_enumeration_group_members: False
+# owncloud_share_api_allow_social_share: True
+# owncloud_share_api_auto_accept_share: False
+# owncloud_share_api_allow_resharing: False
+# owncloud_share_api_allow_group_sharing: False
+# owncloud_share_api_only_share_with_group_members: True
+# owncloud_share_api_only_share_with_membership_groups: True
+# owncloud_share_api_allow_mail_notification: True
+# owncloud_share_api_allow_share_dialog_user_enumeration: True
+# owncloud_share_api_share_dialog_user_enumeration_group_members: False
 
-owncloud_federation_auto_add_servers: False
-owncloud_federation_auto_accept_trusted: False
-owncloud_federation_allow_outgoing_server2server_share: True
-owncloud_federation_allow_incoming_server2server_share: True
+# owncloud_federation_auto_add_servers: False
+# owncloud_federation_auto_accept_trusted: False
+# owncloud_federation_allow_outgoing_server2server_share: True
+# owncloud_federation_allow_incoming_server2server_share: True
 
 # owncloud_mail_domain: example.com # defaults to not set
 # owncloud_mail_from_address: owncloud # defaults to not set
@@ -102,7 +102,7 @@ owncloud_federation_allow_incoming_server2server_share: True
 # owncloud_mail_smtp_host: "smtp.example.com" # defaults to not set
 # owncloud_mail_smtp_port: "587" # defaults to not set
 # owncloud_mail_smtp_secure: ssl # defaults to not set
-owncloud_mail_smtp_auth_enabled: False
+# owncloud_mail_smtp_auth_enabled: False
 # owncloud_mail_smtp_auth_type: "PLAIN" # defaults to not set
 # owncloud_mail_smtp_auth_name: admin@example.com # defaults to not set
 # owncloud_mail_smtp_auth_password: "very_secure" # defaults to not set
@@ -118,7 +118,7 @@ owncloud_mail_smtp_auth_enabled: False
 # owncloud_password_history_blacklist: # (number)
 # owncloud_password_expiration: # (days)
 # owncloud_password_expiration_notification: # (seconds)
-owncloud_password_force_change_on_first_login: False
+# owncloud_password_force_change_on_first_login: False
 
 owncloud_log_type: owncloud
 owncloud_log_file: "{{ owncloud_data_path }}/owncloud.log"
@@ -216,17 +216,13 @@ owncloud_apps_deprecated: []
 #     state: present
 # @end
 
-owncloud_apps:
-  - name: twofactor_totp
-  - name: password_policy
-
-owncloud_app_documents_provider: onlyoffice
-owncloud_app_documents_enabled: False
+# owncloud_app_documents_provider: onlyoffice
+# owncloud_app_documents_enabled: False
 
 owncloud_apps_config: []
 
 # @var owncloud_encryption_enabled:description: >
 # Only supported for ownCloud >= 10.2.1
 # @end
-owncloud_encryption_enabled: False
-owncloud_encryption_force_encrypt_all: False
+# owncloud_encryption_enabled: False
+# owncloud_encryption_force_encrypt_all: False
