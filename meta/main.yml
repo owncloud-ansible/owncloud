@@ -30,9 +30,9 @@ galaxy_info:
       versions:
         - 7
         - 8
-     - name: opensuse
-       versions:
-         - 15.2
+    - name: opensuse
+      versions:
+        - 15.2
   galaxy_tags:
     - owncloud
     - storage
