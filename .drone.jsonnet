@@ -13,6 +13,28 @@ local PipelineLinting = {
         'ansible-later',
       ],
     },
+    {
+      name: 'python-format',
+      image: 'python:3.9',
+      environment: {
+        PY_COLORS: 1,
+      },
+      commands: [
+        'pip install -qq yapf',
+        'yapf -dr ./',
+      ],
+    },
+    {
+      name: 'python-flake8',
+      image: 'python:3.9',
+      environment: {
+        PY_COLORS: 1,
+      },
+      commands: [
+        'pip install -qq flake8',
+        'flake8',
+      ],
+    },
   ],
   trigger: {
     ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
