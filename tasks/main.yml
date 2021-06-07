@@ -7,7 +7,7 @@
       paths:
         - "vars"
     var_files: "{{ lookup('first_found', params, errors='ignore') }}"
-  when: var_files | length
+  when: var_files
 - include_tasks: overwrites.yml
 
 - include_tasks: prepare.yml
@@ -21,7 +21,7 @@
       paths:
         - "tasks"
     task_files: "{{ lookup('first_found', params, errors='ignore') }}"
-  when: task_files | length
+  when: task_files
 
 - include_tasks: config.yml
 - include_tasks: post.yml

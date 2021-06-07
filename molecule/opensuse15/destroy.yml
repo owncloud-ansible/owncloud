@@ -26,7 +26,7 @@
 
     - name: Wait for instance(s) deletion to complete
       async_status:
-        jid: "{{ item.ansible_job_id }}"
+        jid: "{{ item.ansible_job_id | string }}"
       register: hetzner_jobs
       until: hetzner_jobs.finished
       retries: 300
@@ -49,7 +49,7 @@
 
     - name: Wait for volume(s) deletion to complete
       async_status:
-        jid: "{{ item.ansible_job_id }}"
+        jid: "{{ item.ansible_job_id | string }}"
       register: hetzner_volumes
       until: hetzner_volumes.finished
       retries: 300
