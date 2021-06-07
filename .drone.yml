@@ -261,6 +261,7 @@ trigger:
 
 depends_on:
 - testing-ubuntu1804
+- testing-ubuntu1804
 - testing-centos7
 - testing-centos8
 - testing-opensuse15
@@ -300,6 +301,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 62e2db36c8cf8689f3c8afe2f4bf0d7d488391b5d2441baa391504f8935ea4cc
+hmac: 6b4438644d4eba7b0adb3e68b8d1f6b4ee576c897768e5b2e0eee2819222586d
 
 ...

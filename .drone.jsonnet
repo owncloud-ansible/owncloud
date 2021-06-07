@@ -130,6 +130,7 @@ local PipelineDocumentation = {
   },
   depends_on: [
     'testing-ubuntu1804',
+    'testing-ubuntu1804',
     'testing-centos7',
     'testing-centos8',
     'testing-opensuse15',
