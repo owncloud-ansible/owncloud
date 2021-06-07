@@ -1,0 +1,47 @@
+---
+- block:
+    - name: Restart in rescue mode
+      hcloud_server:
+        name: "{{ item.instance }}"
+        ssh_keys:
+          - "{{ item.ssh_key_name }}"
+        api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
+        rescue_mode: linux64
+        state: restarted
+      async: 7200
+      poll: 0
+
+    - name: Wait for SSH
+      wait_for:
+        port: "{{ item.port }}"
+        host: "{{ item.address }}"
+        search_regex: SSH
+        delay: 10
+  delegate_to: localhost
+
+- name: Mount root user volume
+  mount:
+    path: /mnt/root
+    src: /dev/sda2
+    fstype: btrfs
+    opts: subvol=@/root
+    fstab: /tmp/fstab
+    state: mounted
+
+- name: Add ssh public key
+  authorized_key:
+    user: root
+    path: /mnt/root/.ssh/authorized_keys
+    key: "{{ lookup('file', item.identity_file + '.pub') }}"
+    state: present
+
+- name: Restart server
+  reboot:
+
+- name: Wait for SSH
+  wait_for:
+    port: "{{ item.port }}"
+    host: "{{ item.address }}"
+    search_regex: SSH
+    delay: 10
+  delegate_to: localhost
