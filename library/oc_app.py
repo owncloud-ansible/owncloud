@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Standards: 0.1
+# Standards: 0.2
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2019, Robert Kaussow <mail@geeklabor.de>
