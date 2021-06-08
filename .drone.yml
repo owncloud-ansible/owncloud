@@ -301,5 +301,6 @@ depends_on:
 
 ---
 kind: signature
+hmac: 20b4ed490a103cf3b405980e632cf82423de83af84e9753c00711be4af317db8
 
 ...
