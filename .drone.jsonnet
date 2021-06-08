@@ -130,7 +130,7 @@ local PipelineDocumentation = {
   },
   depends_on: [
     'testing-ubuntu1804',
-    'testing-ubuntu1804',
+    'testing-ubuntu2004',
     'testing-centos7',
     'testing-centos8',
     'testing-opensuse15',
@@ -161,6 +161,7 @@ local PipelineNotification = {
   depends_on: [
     'linting',
     'testing-ubuntu1804',
+    'testing-ubuntu2004',
     'testing-centos7',
     'testing-centos8',
     'testing-opensuse15',
