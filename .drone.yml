@@ -16,7 +16,7 @@ steps:
   image: python:3.9
   commands:
   - pip install -qq yapf
-  - yapf -dr ./
+  - "[ -z \"$(find .  -type f -name *.py)\" ] || (yapf -rd ./)"
   environment:
     PY_COLORS: 1
 
@@ -261,7 +261,7 @@ trigger:
 
 depends_on:
 - testing-ubuntu1804
-- testing-ubuntu1804
+- testing-ubuntu2004
 - testing-centos7
 - testing-centos8
 - testing-opensuse15
@@ -294,6 +294,7 @@ trigger:
 depends_on:
 - linting
 - testing-ubuntu1804
+- testing-ubuntu2004
 - testing-centos7
 - testing-centos8
 - testing-opensuse15
@@ -301,6 +302,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 6b4438644d4eba7b0adb3e68b8d1f6b4ee576c897768e5b2e0eee2819222586d
+hmac: 565983c04fe78fbb8116e32bed9c877477cdec52503272a74448c537ce7f1e99
 
 ...
