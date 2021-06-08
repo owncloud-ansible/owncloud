@@ -8,9 +8,9 @@ dependency:
 driver:
   name: delegated
 platforms:
-  - name: ubuntu-18.04-owncloud
+  - name: ubuntu-20.04-owncloud
     server_type: cx11
-    image: ubuntu-18.04
+    image: ubuntu-20.04
 lint: |
   /usr/local/bin/flake8
 provisioner:
