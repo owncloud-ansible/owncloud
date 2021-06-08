@@ -16,7 +16,7 @@ steps:
   image: python:3.9
   commands:
   - pip install -qq yapf
-  - yapf -dr ./
+  - "[ -z \"$(find .  -type f -name *.py)\" ] || (yapf -rd ./)"
   environment:
     PY_COLORS: 1
 
@@ -301,6 +301,5 @@ depends_on:
 
 ---
 kind: signature
-hmac: 6b4438644d4eba7b0adb3e68b8d1f6b4ee576c897768e5b2e0eee2819222586d
 
 ...

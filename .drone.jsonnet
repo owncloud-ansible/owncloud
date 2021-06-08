@@ -21,7 +21,7 @@ local PipelineLinting = {
       },
       commands: [
         'pip install -qq yapf',
-        'yapf -dr ./',
+        '[ -z "$(find .  -type f -name *.py)" ] || (yapf -rd ./)',
       ],
     },
     {
