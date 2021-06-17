@@ -104,7 +104,7 @@
         content: |
           # Molecule managed
 
-          {{ instance_conf | to_json | from_json | to_yaml }}
+          {{ instance_conf | to_nice_yaml(indent=2) }}
         dest: "{{ molecule_instance_config }}"
       when: server.changed | bool
 
