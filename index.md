@@ -687,7 +687,7 @@ owncloud_share_api_allow_public_upload: true
 #### Default value
 
 ```YAML
-owncloud_share_api_allow_resharing: false
+owncloud_share_api_allow_resharing: true
 ```
 
 ### owncloud_share_api_allow_share_dialog_user_enumeration
@@ -775,7 +775,7 @@ owncloud_share_api_expire_after_n_days: 7
 #### Default value
 
 ```YAML
-owncloud_share_api_only_share_with_group_members: true
+owncloud_share_api_only_share_with_group_members: false
 ```
 
 ### owncloud_share_api_only_share_with_membership_groups
@@ -783,7 +783,7 @@ owncloud_share_api_only_share_with_group_members: true
 #### Default value
 
 ```YAML
-owncloud_share_api_only_share_with_membership_groups: true
+owncloud_share_api_only_share_with_membership_groups: false
 ```
 
 ### owncloud_share_api_share_dialog_user_enumeration_group_members
