@@ -179,12 +179,13 @@ owncloud_upgrade_migration_test: True
 owncloud_upgrade_3party_app_disable: True
 
 # @var owncloud_cron_backend:description: >
-# Possible values are `webcron|cron|ajax`.
-# See: https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs
+# Possible values are `webcron|cron|ajax`. See the [ownCloud Server](https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs)
+# documentation for details.
+# @end
 owncloud_cron_backend: cron
 
 # @var owncloud_cron_jobs:description: >
-# Will be applied only if owncloud_cron_backend is 'cron'
+# Will be applied only if `owncloud_cron_backend` is set to `cron`. All cronjobs be written to a single crontab `/etc/cron.d/owncloud`.
 # @end
 owncloud_cron_jobs:
   - name: oc cron
