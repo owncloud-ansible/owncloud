@@ -255,7 +255,7 @@ owncloud_cors_allowed_domains: []
 
 ### owncloud_cron_backend
 
-Possible values are `webcron|cron|ajax`. See: https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs
+Possible values are `webcron|cron|ajax`. See the [ownCloud Server](https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs) documentation for details.
 
 #### Default value
 
@@ -265,7 +265,7 @@ owncloud_cron_backend: cron
 
 ### owncloud_cron_jobs
 
-Will be applied only if owncloud_cron_backend is 'cron'
+Will be applied only if `owncloud_cron_backend` is set to `cron`. All cronjobs are written to a single crontab `/etc/cron.d/owncloud`.
 
 #### Default value
 
