@@ -913,7 +913,7 @@ owncloud_upgrade_migration_test: true
 #### Default value
 
 ```YAML
-owncloud_version: 10.7.0
+owncloud_version: 10.8.0
 ```
 
 ### owncloud_version_hide
