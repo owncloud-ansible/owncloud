@@ -1,5 +1,5 @@
 ---
-owncloud_version: "10.7.0"
+owncloud_version: "10.8.0"
 
 # @var owncloud_download_url:description: >
 # You can set a custom download url especialy for the enterprise version.
