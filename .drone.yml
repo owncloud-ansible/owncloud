@@ -183,6 +183,7 @@ platform:
 steps:
 - commands:
   - git fetch -tq
+  - git-chglog --no-color --no-emoji ${DRONE_TAG:---next-tag unreleased unreleased}
   - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased
     unreleased}
   image: thegeeklab/git-chglog
@@ -277,6 +278,6 @@ trigger:
   - failure
 ---
 kind: signature
-hmac: 921e61cdaab1076faa0b82df725b510b75d896c9fc579e47364afab003eb51a4
+hmac: ae31e032aec383019487fa74a430ad2d5d703393028a2487c80fdfd1dc933a15
 
 ...
