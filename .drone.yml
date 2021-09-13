@@ -1,234 +1,231 @@
 ---
 kind: pipeline
 name: linting
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: later
-  image: thegeeklab/ansible-later
-  commands:
+- commands:
   - ansible-later
-
-- name: python-format
-  image: python:3.9
-  commands:
+  image: thegeeklab/ansible-later
+  name: later
+- commands:
   - pip install -qq yapf
-  - "[ -z \"$(find .  -type f -name *.py)\" ] || (yapf -rd ./)"
+  - '[ -z "$(find .  -type f -name *.py)" ] || (yapf -rd ./)'
   environment:
     PY_COLORS: 1
-
-- name: python-flake8
   image: python:3.9
-  commands:
+  name: python-format
+- commands:
   - pip install -qq flake8
   - flake8
   environment:
     PY_COLORS: 1
-
+  image: python:3.9
+  name: python-flake8
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
 ---
-kind: pipeline
-name: testing-ubuntu1804
-
-platform:
-  os: linux
-  arch: amd64
-
 concurrency:
   limit: 1
-
-workspace:
-  base: /drone/src
-  path: owncloud
-
+depends_on:
+- linting
+kind: pipeline
+name: testing-ubuntu1804
+platform:
+  arch: amd64
+  os: linux
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
+- commands:
   - molecule test -s ubuntu1804
   environment:
     HCLOUD_TOKEN:
       from_secret: hcloud_token
     PY_COLORS: 1
     USER: root
-
+  image: thegeeklab/molecule:3
+  name: molecule
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- linting
-
----
-kind: pipeline
-name: testing-ubuntu2004
-
-platform:
-  os: linux
-  arch: amd64
-
-concurrency:
-  limit: 1
-
 workspace:
   base: /drone/src
   path: owncloud
-
+---
+concurrency:
+  limit: 1
+depends_on:
+- linting
+kind: pipeline
+name: testing-ubuntu2004
+platform:
+  arch: amd64
+  os: linux
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
+- commands:
   - molecule test -s ubuntu2004
   environment:
     HCLOUD_TOKEN:
       from_secret: hcloud_token
     PY_COLORS: 1
     USER: root
-
+  image: thegeeklab/molecule:3
+  name: molecule
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- linting
-
----
-kind: pipeline
-name: testing-centos7
-
-platform:
-  os: linux
-  arch: amd64
-
-concurrency:
-  limit: 1
-
 workspace:
   base: /drone/src
   path: owncloud
-
+---
+concurrency:
+  limit: 1
+depends_on:
+- linting
+kind: pipeline
+name: testing-centos7
+platform:
+  arch: amd64
+  os: linux
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
+- commands:
   - molecule test -s centos7
   environment:
     HCLOUD_TOKEN:
       from_secret: hcloud_token
     PY_COLORS: 1
     USER: root
-
+  image: thegeeklab/molecule:3
+  name: molecule
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- linting
-
----
-kind: pipeline
-name: testing-centos8
-
-platform:
-  os: linux
-  arch: amd64
-
-concurrency:
-  limit: 1
-
 workspace:
   base: /drone/src
   path: owncloud
-
+---
+concurrency:
+  limit: 1
+depends_on:
+- linting
+kind: pipeline
+name: testing-centos8
+platform:
+  arch: amd64
+  os: linux
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
+- commands:
   - molecule test -s centos8
   environment:
     HCLOUD_TOKEN:
       from_secret: hcloud_token
     PY_COLORS: 1
     USER: root
-
+  image: thegeeklab/molecule:3
+  name: molecule
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- linting
-
----
-kind: pipeline
-name: testing-opensuse15
-
-platform:
-  os: linux
-  arch: amd64
-
-concurrency:
-  limit: 1
-
 workspace:
   base: /drone/src
   path: owncloud
-
+---
+concurrency:
+  limit: 1
+depends_on:
+- linting
+kind: pipeline
+name: testing-opensuse15
+platform:
+  arch: amd64
+  os: linux
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
+- commands:
   - molecule test -s opensuse15
   environment:
     HCLOUD_TOKEN:
       from_secret: hcloud_token
     PY_COLORS: 1
     USER: root
-
+  image: thegeeklab/molecule:3
+  name: molecule
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- linting
-
+workspace:
+  base: /drone/src
+  path: owncloud
 ---
+depends_on:
+- testing-ubuntu1804
+- testing-ubuntu2004
+- testing-centos7
+- testing-centos8
+- testing-opensuse15
+kind: pipeline
+name: release
+platform:
+  arch: amd64
+  os: linux
+steps:
+- commands:
+  - git fetch -tq
+  - git-chglog --no-color --no-emoji ${DRONE_TAG:---next-tag unreleased unreleased}
+  - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased
+    unreleased}
+  image: thegeeklab/git-chglog
+  name: changelog-generate
+- image: plugins/github-release
+  name: release
+  settings:
+    api_key:
+      from_secret: github_token
+    files:
+    - dist/*
+    - sha256sum.txt
+    note: CHANGELOG.md
+    overwrite: true
+    title: ${DRONE_TAG}
+  when:
+    ref:
+    - refs/tags/**
+trigger:
+  ref:
+  - refs/heads/main
+  - refs/tags/**
+  - refs/pull/**
+---
+depends_on:
+- release
 kind: pipeline
 name: documentation
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: generate
-  image: thegeeklab/ansible-doctor
-  environment:
+- environment:
     ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
     ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
     ANSIBLE_DOCTOR_LOG_LEVEL: INFO
     ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
     ANSIBLE_DOCTOR_TEMPLATE: hugo-book
-
-- name: publish
-  image: plugins/gh-pages
+  image: thegeeklab/ansible-doctor
+  name: generate
+- image: plugins/gh-pages
+  name: publish
   settings:
     pages_directory: _docs/
     password:
@@ -239,9 +236,8 @@ steps:
   when:
     ref:
     - refs/heads/master
-
-- name: trigger
-  image: plugins/downstream
+- image: plugins/downstream
+  name: trigger
   settings:
     fork: true
     repositories:
@@ -252,37 +248,27 @@ steps:
   when:
     ref:
     - refs/heads/master
-
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- testing-ubuntu1804
-- testing-ubuntu2004
-- testing-centos7
-- testing-centos8
-- testing-opensuse15
-
 ---
+depends_on:
+- documentation
 kind: pipeline
 name: notification
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: notify
-  image: plugins/slack:1
+- image: plugins/slack:1
+  name: notify
   settings:
     channel:
       from_secret: slack_channel
     webhook:
       from_secret: slack_webhook_private
-
 trigger:
   ref:
   - refs/heads/master
@@ -290,18 +276,8 @@ trigger:
   status:
   - success
   - failure
-
-depends_on:
-- linting
-- testing-ubuntu1804
-- testing-ubuntu2004
-- testing-centos7
-- testing-centos8
-- testing-opensuse15
-- documentation
-
 ---
 kind: signature
-hmac: 565983c04fe78fbb8116e32bed9c877477cdec52503272a74448c537ce7f1e99
+hmac: ae31e032aec383019487fa74a430ad2d5d703393028a2487c80fdfd1dc933a15
 
 ...
