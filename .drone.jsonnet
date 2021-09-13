@@ -77,6 +77,49 @@ local PipelineTesting(scenario='ubuntu1804') = {
   ],
 };
 
+local PipelineRelease = {
+  kind: 'pipeline',
+  name: 'release',
+  platform: {
+    os: 'linux',
+    arch: 'amd64',
+  },
+  steps: [
+    {
+      name: 'changelog-generate',
+      image: 'thegeeklab/git-chglog',
+      commands: [
+        'git fetch -tq',
+        'git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}',
+      ],
+    },
+    {
+      name: 'release',
+      image: 'plugins/github-release',
+      settings: {
+        overwrite: true,
+        api_key: { from_secret: 'github_token' },
+        files: ['dist/*', 'sha256sum.txt'],
+        title: '${DRONE_TAG}',
+        note: 'CHANGELOG.md',
+      },
+      when: {
+        ref: ['refs/tags/**'],
+      },
+    },
+  ],
+  depends_on: [
+    'testing-ubuntu1804',
+    'testing-ubuntu2004',
+    'testing-centos7',
+    'testing-centos8',
+    'testing-opensuse15',
+  ],
+  trigger: {
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
+  },
+};
+
 local PipelineDocumentation = {
   kind: 'pipeline',
   name: 'documentation',
@@ -129,11 +172,7 @@ local PipelineDocumentation = {
     ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
   },
   depends_on: [
-    'testing-ubuntu1804',
-    'testing-ubuntu2004',
-    'testing-centos7',
-    'testing-centos8',
-    'testing-opensuse15',
+    'release',
   ],
 };
 
@@ -159,12 +198,6 @@ local PipelineNotification = {
     status: ['success', 'failure'],
   },
   depends_on: [
-    'linting',
-    'testing-ubuntu1804',
-    'testing-ubuntu2004',
-    'testing-centos7',
-    'testing-centos8',
-    'testing-opensuse15',
     'documentation',
   ],
 };
@@ -177,6 +210,7 @@ local PipelineNotification = {
   PipelineTesting(scenario='centos7'),
   PipelineTesting(scenario='centos8'),
   PipelineTesting(scenario='opensuse15'),
+  PipelineRelease,
   PipelineDocumentation,
   PipelineNotification,
 ]
