@@ -193,9 +193,6 @@ steps:
   settings:
     api_key:
       from_secret: github_token
-    files:
-    - dist/*
-    - sha256sum.txt
     note: CHANGELOG.md
     overwrite: true
     title: ${DRONE_TAG}
@@ -278,6 +275,6 @@ trigger:
   - failure
 ---
 kind: signature
-hmac: ae31e032aec383019487fa74a430ad2d5d703393028a2487c80fdfd1dc933a15
+hmac: 9acf64c27dbe1df74f41a66ebf1e1e56a86ecfc7eb49184275450e8d1279b587
 
 ...
