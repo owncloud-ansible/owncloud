@@ -8,9 +8,9 @@ dependency:
 driver:
   name: delegated
 platforms:
-  - name: centos-8-owncloud
+  - name: rocky-8-owncloud
     server_type: cx11
-    image: centos-8
+    image: rocky-8
 lint: |
   /usr/local/bin/flake8
 provisioner:
