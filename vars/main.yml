@@ -9,6 +9,7 @@ __owncloud_packages:
   - unzip
   - bzip2
   - rsync
+  - acl
 
 __owncloud_enable_sebooleans:
   - httpd_can_network_connect_db
