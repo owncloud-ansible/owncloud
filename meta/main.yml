@@ -11,8 +11,8 @@ galaxy_info:
   # [![GitHub](https://img.shields.io/github/license/owncloud-ansible/owncloud)](https://github.com/owncloud-ansible/owncloud/blob/main/LICENSE)
   #
   # {{< hint warning >}}
-  # __Warning__<br/>
-  # This Ansible role is currently in beta state. Use it at your own risk.
+  # __Important__<br/>
+  # We have switched to 'main' as default branch. The 'master' branch is no longer maintained and will be removed after March 31, 2022!
   # {{< /hint >}}
   #
   # Ansible role to setup an ownCloud server. Currently, only a single ownCloud server is supported.
