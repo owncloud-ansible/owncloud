@@ -7,32 +7,32 @@ platform:
   arch: amd64
 
 steps:
-- name: later
-  image: thegeeklab/ansible-later
-  commands:
-  - ansible-later
+  - name: later
+    image: thegeeklab/ansible-later
+    commands:
+      - ansible-later
 
-- name: python-format
-  image: python:3.9
-  commands:
-  - pip install -qq yapf
-  - "[ -z \"$(find .  -type f -name *.py)\" ] || (yapf -rd ./)"
-  environment:
-    PY_COLORS: 1
+  - name: python-format
+    image: python:3.9
+    commands:
+      - pip install -qq yapf
+      - "[ -z \"$(find .  -type f -name *.py)\" ] || (yapf -rd ./)"
+    environment:
+      PY_COLORS: 1
 
-- name: python-flake8
-  image: python:3.9
-  commands:
-  - pip install -qq flake8
-  - flake8
-  environment:
-    PY_COLORS: 1
+  - name: python-flake8
+    image: python:3.9
+    commands:
+      - pip install -qq flake8
+      - flake8
+    environment:
+      PY_COLORS: 1
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 ---
 kind: pipeline
@@ -50,24 +50,24 @@ workspace:
   path: owncloud
 
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
-  - molecule test -s ubuntu2004
-  environment:
-    HCLOUD_TOKEN:
-      from_secret: hcloud_token
-    PY_COLORS: 1
-    USER: root
+  - name: molecule
+    image: thegeeklab/molecule:3
+    commands:
+      - molecule test -s ubuntu2004
+    environment:
+      HCLOUD_TOKEN:
+        from_secret: hcloud_token
+      PY_COLORS: 1
+      USER: root
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 depends_on:
-- linting
+  - linting
 
 ---
 kind: pipeline
@@ -85,24 +85,24 @@ workspace:
   path: owncloud
 
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
-  - molecule test -s centos7
-  environment:
-    HCLOUD_TOKEN:
-      from_secret: hcloud_token
-    PY_COLORS: 1
-    USER: root
+  - name: molecule
+    image: thegeeklab/molecule:3
+    commands:
+      - molecule test -s centos7
+    environment:
+      HCLOUD_TOKEN:
+        from_secret: hcloud_token
+      PY_COLORS: 1
+      USER: root
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 depends_on:
-- linting
+  - linting
 
 ---
 kind: pipeline
@@ -120,24 +120,24 @@ workspace:
   path: owncloud
 
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
-  - molecule test -s rocky8
-  environment:
-    HCLOUD_TOKEN:
-      from_secret: hcloud_token
-    PY_COLORS: 1
-    USER: root
+  - name: molecule
+    image: thegeeklab/molecule:3
+    commands:
+      - molecule test -s rocky8
+    environment:
+      HCLOUD_TOKEN:
+        from_secret: hcloud_token
+      PY_COLORS: 1
+      USER: root
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 depends_on:
-- linting
+  - linting
 
 ---
 kind: pipeline
@@ -155,24 +155,24 @@ workspace:
   path: owncloud
 
 steps:
-- name: molecule
-  image: thegeeklab/molecule:3
-  commands:
-  - molecule test -s opensuse15
-  environment:
-    HCLOUD_TOKEN:
-      from_secret: hcloud_token
-    PY_COLORS: 1
-    USER: root
+  - name: molecule
+    image: thegeeklab/molecule:3
+    commands:
+      - molecule test -s opensuse15
+    environment:
+      HCLOUD_TOKEN:
+        from_secret: hcloud_token
+      PY_COLORS: 1
+      USER: root
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 depends_on:
-- linting
+  - linting
 
 ---
 kind: pipeline
@@ -183,36 +183,36 @@ platform:
   arch: amd64
 
 steps:
-- name: changelog-generate
-  image: thegeeklab/git-chglog
-  commands:
-  - git fetch -tq
-  - git-chglog --no-color --no-emoji ${DRONE_TAG:---next-tag unreleased unreleased}
-  - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}
+  - name: changelog-generate
+    image: thegeeklab/git-chglog
+    commands:
+      - git fetch -tq
+      - git-chglog --no-color --no-emoji ${DRONE_TAG:---next-tag unreleased unreleased}
+      - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}
 
-- name: release
-  image: plugins/github-release
-  settings:
-    api_key:
-      from_secret: github_token
-    note: CHANGELOG.md
-    overwrite: true
-    title: ${DRONE_TAG}
-  when:
-    ref:
-    - refs/tags/**
+  - name: release
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_token
+      note: CHANGELOG.md
+      overwrite: true
+      title: ${DRONE_TAG}
+    when:
+      ref:
+        - refs/tags/**
 
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 depends_on:
-- testing-ubuntu2004
-- testing-centos7
-- testing-rocky8
-- testing-opensuse15
+  - testing-ubuntu2004
+  - testing-centos7
+  - testing-rocky8
+  - testing-opensuse15
 
 ---
 kind: pipeline
@@ -223,49 +223,49 @@ platform:
   arch: amd64
 
 steps:
-- name: generate
-  image: thegeeklab/ansible-doctor
-  environment:
-    ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
-    ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
-    ANSIBLE_DOCTOR_LOG_LEVEL: INFO
-    ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
-    ANSIBLE_DOCTOR_TEMPLATE: hugo-book
+  - name: generate
+    image: thegeeklab/ansible-doctor
+    environment:
+      ANSIBLE_DOCTOR_EXCLUDE_FILES: molecule/
+      ANSIBLE_DOCTOR_FORCE_OVERWRITE: true
+      ANSIBLE_DOCTOR_LOG_LEVEL: INFO
+      ANSIBLE_DOCTOR_OUTPUT_DIR: _docs/
+      ANSIBLE_DOCTOR_TEMPLATE: hugo-book
 
-- name: publish
-  image: plugins/gh-pages
-  settings:
-    pages_directory: _docs/
-    password:
-      from_secret: github_token
-    target_branch: docs
-    username:
-      from_secret: github_username
-  when:
-    ref:
-    - refs/heads/master
+  - name: publish
+    image: plugins/gh-pages
+    settings:
+      pages_directory: _docs/
+      password:
+        from_secret: github_token
+      target_branch: docs
+      username:
+        from_secret: github_username
+    when:
+      ref:
+        - refs/heads/main
 
-- name: trigger
-  image: plugins/downstream
-  settings:
-    fork: true
-    repositories:
-    - owncloud-ansible/owncloud-ansible.github.io@source
-    server: https://drone.owncloud.com
-    token:
-      from_secret: drone_token
-  when:
-    ref:
-    - refs/heads/master
+  - name: trigger
+    image: plugins/downstream
+    settings:
+      fork: true
+      repositories:
+        - owncloud-ansible/owncloud-ansible.github.io@source
+      server: https://drone.owncloud.com
+      token:
+        from_secret: drone_token
+    when:
+      ref:
+        - refs/heads/main
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
 
 depends_on:
-- release
+  - release
 
 ---
 kind: pipeline
@@ -276,27 +276,27 @@ platform:
   arch: amd64
 
 steps:
-- name: notify
-  image: plugins/slack:1
-  settings:
-    channel:
-      from_secret: slack_channel
-    webhook:
-      from_secret: slack_webhook_private
+  - name: notify
+    image: plugins/slack:1
+    settings:
+      channel:
+        from_secret: slack_channel
+      webhook:
+        from_secret: slack_webhook_private
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/tags/**
+    - refs/heads/main
+    - refs/tags/**
   status:
-  - success
-  - failure
+    - success
+    - failure
 
 depends_on:
-- documentation
+  - documentation
 
 ---
 kind: signature
-hmac: 319041466fde9618b1b52520f45af0168cf7cd75bee6e615020df45d9a780f1f
+hmac: 69d1820c904062b90a62049163a03026c920963f10ad2d7eeba668ee4aa0c03c
 
 ...
