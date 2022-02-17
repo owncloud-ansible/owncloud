@@ -9,7 +9,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 def test_owncloud_running_services(host):
     assert host.service("httpd24-httpd").is_running
-    assert host.service("rh-mariadb101-mariadb").is_running
+    assert host.service("rh-mariadb103-mariadb").is_running
     assert host.service("rh-redis5-redis").is_running
 
 
