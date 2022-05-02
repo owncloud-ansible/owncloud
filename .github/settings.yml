@@ -67,6 +67,8 @@ branches:
       required_status_checks: null
       enforce_admins: true
       restrictions:
+        apps:
+          - renovate
         users: []
         teams:
           - bot
