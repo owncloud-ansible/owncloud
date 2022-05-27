@@ -172,6 +172,23 @@ owncloud_csrf_enabled: True
 # @var owncloud_config_extra:description: >
 # For availabe configuration options see:
 # https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html
+# For nested values YAML dictionaries need to be used, see example for an OpenID Connect configuration below.
+# @end
+# @var owncloud_config_extra:example: >
+# owncloud_config_extra:
+#   - http.cookie.samesite: "None"
+#   - openid-connect:
+#       auto-provision:
+#         enabled: true
+#         email-claim: "email"
+#         display-name-claim: "name"
+#       provider-url: "https://example.com"
+#       client-id: "myclientid"
+#       client-secret: "mysecret"
+#       autoRedirectOnLoginPage: false
+#       mode: "email"
+#       scopes: []
+#       use-access-token-payload-for-user-info: false
 # @end
 owncloud_config_extra: {}
 
