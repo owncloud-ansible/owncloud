@@ -229,12 +229,31 @@ owncloud_autosetup: true
 
 ### owncloud_config_extra
 
-For availabe configuration options see: https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html
+For availabe configuration options see: https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html For nested values YAML dictionaries need to be used, see example for an OpenID Connect configuration below.
 
 #### Default value
 
 ```YAML
 owncloud_config_extra: {}
+```
+
+#### Example usage
+
+```YAML
+owncloud_config_extra:
+  - http.cookie.samesite: "None"
+  - openid-connect:
+      auto-provision:
+        enabled: true
+        email-claim: "email"
+        display-name-claim: "name"
+      provider-url: "https://example.com"
+      client-id: "myclientid"
+      client-secret: "mysecret"
+      autoRedirectOnLoginPage: false
+      mode: "email"
+      scopes: []
+      use-access-token-payload-for-user-info: false
 ```
 
 ### owncloud_config_path
