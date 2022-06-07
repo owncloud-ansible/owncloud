@@ -189,6 +189,8 @@ owncloud_apps:
     url_password:my_password
     force_basic_auth: true
     state: present
+  - name: unwanted_app
+    enabled: false
 ```
 
 ### owncloud_apps_config
