@@ -10,3 +10,4 @@ __pycache__/
 # ---> Misc
 *.swp
 CHANGELOG.md
+/_docs
