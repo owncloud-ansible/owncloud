@@ -233,7 +233,7 @@ owncloud_apps_deprecated: []
 #     force_basic_auth: true
 #     state: present
 #   - name: unwanted_app
-      enabled: false
+#     enabled: false
 # @end
 
 owncloud_apps:
