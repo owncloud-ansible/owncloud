@@ -246,10 +246,10 @@ owncloud_app_documents_enabled: False
 # @end
 # @var owncloud_apps_config:example: >
 # owncloud_apps_config:
-#  - name: files
-#    parameters:
-#      - attribute: default_quota
-#        value: "0 B"
+#   - name: files
+#     parameters:
+#       - attribute: default_quota
+#         value: "0 B"
 # @end
 owncloud_apps_config: []
 
