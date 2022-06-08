@@ -232,6 +232,8 @@ owncloud_apps_deprecated: []
 #     url_password:my_password
 #     force_basic_auth: true
 #     state: present
+#   - name: unwanted_app
+#     enabled: false
 # @end
 
 owncloud_apps:
