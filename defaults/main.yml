@@ -244,7 +244,8 @@ owncloud_app_documents_provider: onlyoffice
 owncloud_app_documents_enabled: False
 
 # @var owncloud_apps_config:description: >
-# Manages ownCloud system and app config. The name attribute holds the name of the app which is either 'system' or '<app_name>'. 'attribute' in the parameters dictionary hold the attribute of the app and 'value' the value it should be set to
+# Manages ownCloud system and app configuration. The name attribute holds the name of the app which is either `system` or `<app_name>`.
+# The `attribute` in the parameters dictionary hold the attribute of the app and `value` the new value to set.
 # @end
 # @var owncloud_apps_config:example: >
 # owncloud_apps_config:
