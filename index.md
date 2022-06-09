@@ -195,10 +195,22 @@ owncloud_apps:
 
 ### owncloud_apps_config
 
+Manages ownCloud system and app configuration. The name attribute holds the name of the app which is either `system` or `<app_name>`. The `attribute` in the parameters dictionary hold the attribute of the app and `value` the new value to set.
+
 #### Default value
 
 ```YAML
 owncloud_apps_config: []
+```
+
+#### Example usage
+
+```YAML
+owncloud_apps_config:
+  - name: files
+    parameters:
+      - attribute: default_quota
+        value: "0 B"
 ```
 
 ### owncloud_apps_deprecated
