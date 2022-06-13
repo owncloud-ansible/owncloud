@@ -394,7 +394,7 @@ You can set a custom download url especialy for the enterprise version.
 #### Default value
 
 ```YAML
-owncloud_download_url: https://download.owncloud.org/community/owncloud-{{ owncloud_version
+owncloud_download_url: https://download.owncloud.com/server/stable/owncloud-{{ owncloud_version
   }}.tar.bz2
 ```
 
