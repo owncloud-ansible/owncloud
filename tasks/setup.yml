@@ -1,23 +1,5 @@
 ---
 - block:
-    - name: Disable deprecated ownCloud apps
-      oc_app:
-        name: "{{ item }}"
-        enabled: no
-        executable: "{{ owncloud_occ_executable | default(omit) }}"
-        state: current
-      loop: "{{ owncloud_apps_deprecated }}"
-      when: ansible_local.owncloud.installed | bool or ansible_local.owncloud.maintenance | bool
-
-    - name: Enable maintainance mode
-      command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --on"
-      when:
-        - ansible_local.owncloud.installed | bool
-        - __occ_bin_link.stat.exists
-        - __occ_bin_src.stat.exists
-      become: True
-      become_user: "{{ owncloud_app_user }}"
-
     - name: Create temp directory
       file:
         path: /tmp/owncloud_src
@@ -49,6 +31,26 @@
   when:
     - owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
     - not owncloud_install_from_filesystem | bool
+
+- block:
+    - name: Disable deprecated ownCloud apps
+      oc_app:
+        name: "{{ item }}"
+        enabled: no
+        executable: "{{ owncloud_occ_executable | default(omit) }}"
+        state: current
+      loop: "{{ owncloud_apps_deprecated }}"
+      when: ansible_local.owncloud.installed | bool or ansible_local.owncloud.maintenance | bool
+
+    - name: Enable maintainance mode
+      command: "{{ owncloud_occ_executable | quote }} maintenance:singleuser --on"
+      when:
+        - ansible_local.owncloud.installed | bool
+        - __occ_bin_link.stat.exists
+        - __occ_bin_src.stat.exists
+      become: True
+      become_user: "{{ owncloud_app_user }}"
+  when: owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
 
 - block:
     - name: Copy install source to remote host
