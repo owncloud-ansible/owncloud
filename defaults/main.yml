@@ -4,7 +4,7 @@ owncloud_version: "10.9.0"
 # @var owncloud_download_url:description: >
 # You can set a custom download url especialy for the enterprise version.
 # @end
-owncloud_download_url: "https://download.owncloud.org/community/owncloud-{{ owncloud_version }}.tar.bz2"
+owncloud_download_url: "https://download.owncloud.com/server/stable/owncloud-{{ owncloud_version }}.tar.bz2"
 
 # owncloud_download_auth_user: #
 
