@@ -1,12 +1,11 @@
 ---
-- block:
-    - name: Create temp directory
-      file:
-        path: /tmp/owncloud_src
-        state: directory
-        owner: "{{ owncloud_app_user }}"
-        group: "{{ owncloud_app_group }}"
-        mode: 0750
+- name: Create temp directory
+  file:
+    path: /tmp/owncloud_src
+    state: directory
+    owner: "{{ owncloud_app_user }}"
+    group: "{{ owncloud_app_group }}"
+    mode: 0750
   when: owncloud_current_version is version_compare(owncloud_version, operator="<", strict=True)
 
 - block:
