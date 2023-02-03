@@ -126,6 +126,11 @@ owncloud_log_level: 2
 owncloud_log_timezone: "Etc/UTC"
 owncloud_log_dateformat: "Y-m-d H:i:s.u"
 owncloud_log_cron: True
+
+# @var owncloud_log_rotate_size:description: >
+# Log rotate file size in bytes
+# See [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html#define-the-maximum-log-rotation-file-size)
+# @end
 owncloud_log_rotate_size: 0
 owncloud_syslog_tag: ownCloud
 owncloud_syslog_log_format: "[%reqId%][%remoteAddr%][%user%][%app%][%method%][%url%] %message%"
