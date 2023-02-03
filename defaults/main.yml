@@ -129,7 +129,7 @@ owncloud_log_cron: True
 
 # @var owncloud_log_rotate_size:description: >
 # Log rotate file size in bytes
-# See https://doc.owncloud.com/server/next/admin_manual/configuration/server/config_sample_php_parameters.html#define-the-maximum-log-rotation-file-size
+# See https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html#define-the-maximum-log-rotation-file-size
 # @end
 owncloud_log_rotate_size: 0
 owncloud_syslog_tag: ownCloud
