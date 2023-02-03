@@ -3,7 +3,7 @@ title: owncloud
 type: docs
 ---
 
-[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/owncloud-ansible/owncloud) [![Build Status](https://drone.owncloud.com/api/badges/owncloud-ansible/owncloud/status.svg)](https://drone.owncloud.com/owncloud-ansible/owncloud) [![GitHub](https://img.shields.io/github/license/owncloud-ansible/owncloud)](https://github.com/owncloud-ansible/owncloud/blob/main/LICENSE)
+[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&amp;logoColor=white)](https://github.com/owncloud-ansible/owncloud) [![Build Status](https://drone.owncloud.com/api/badges/owncloud-ansible/owncloud/status.svg)](https://drone.owncloud.com/owncloud-ansible/owncloud) [![GitHub](https://img.shields.io/github/license/owncloud-ansible/owncloud)](https://github.com/owncloud-ansible/owncloud/blob/main/LICENSE)
 
 Role to setup ownCloud server. Clustered mode is currently not supported.
 
@@ -528,6 +528,8 @@ owncloud_log_level: 2
 ```
 
 ### owncloud_log_rotate_size
+
+Log rotate file size in bytes See [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html#define-the-maximum-log-rotation-file-size)
 
 #### Default value
 
