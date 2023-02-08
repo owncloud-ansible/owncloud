@@ -243,7 +243,7 @@ owncloud_autosetup: true
 
 ### owncloud_config_extra
 
-For availabe configuration options see: https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html For nested values YAML dictionaries need to be used, see example for an OpenID Connect configuration below.
+For availabe configuration options see: [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html) For nested values YAML dictionaries need to be used, see example for an OpenID Connect configuration below.
 
 #### Default value
 
@@ -288,7 +288,7 @@ owncloud_cors_allowed_domains: []
 
 ### owncloud_cron_backend
 
-Possible values are `webcron|cron|ajax`. See the [ownCloud Server](https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs) documentation for details.
+Possible values are `webcron|cron|ajax`. See the [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs) documentation for details.
 
 #### Default value
 
@@ -315,7 +315,7 @@ owncloud_cron_jobs:
 
 ### owncloud_csrf_enabled
 
-Be careful! See https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html#disable-ownclouds-built-in-csrf-protection-mechanism
+Be careful! See [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html#disable-ownclouds-built-in-csrf-protection-mechanism)
 
 #### Default value
 
