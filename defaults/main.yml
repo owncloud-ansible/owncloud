@@ -170,13 +170,13 @@ owncloud_login_alternatives: []
 
 # @var owncloud_csrf_enabled:description: >
 # Be careful!
-# See https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html#disable-ownclouds-built-in-csrf-protection-mechanism
+# See [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html#disable-ownclouds-built-in-csrf-protection-mechanism)
 # @end
 owncloud_csrf_enabled: True
 
 # @var owncloud_config_extra:description: >
 # For availabe configuration options see:
-# https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html
+# [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/config_sample_php_parameters.html)
 # For nested values YAML dictionaries need to be used, see example for an OpenID Connect configuration below.
 # @end
 # @var owncloud_config_extra:example: >
@@ -201,7 +201,7 @@ owncloud_upgrade_migration_test: True
 owncloud_upgrade_3party_app_disable: True
 
 # @var owncloud_cron_backend:description: >
-# Possible values are `webcron|cron|ajax`. See the [ownCloud Server](https://doc.owncloud.com/server/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs)
+# Possible values are `webcron|cron|ajax`. See the [documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/background_jobs_configuration.html#cron-jobs)
 # documentation for details.
 # @end
 owncloud_cron_backend: cron
