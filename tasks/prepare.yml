@@ -19,6 +19,8 @@
 - name: Gather facts if they were modified
   action: setup
   when: __owncloud_register_local_facts is changed
+  tags:
+    - skip_ansible_later
 
 - name: Create system group '{{ owncloud_system_group }}'
   group:

@@ -245,19 +245,6 @@ steps:
       ref:
         - refs/heads/main
 
-  - name: trigger
-    image: plugins/downstream
-    settings:
-      fork: true
-      repositories:
-        - owncloud-ansible/owncloud-ansible.github.io@main
-      server: https://drone.owncloud.com
-      token:
-        from_secret: drone_token
-    when:
-      ref:
-        - refs/heads/main
-
 trigger:
   ref:
     - refs/heads/main
@@ -280,9 +267,9 @@ steps:
     image: plugins/slack:1
     settings:
       channel:
-        from_secret: slack_channel
+        from_secret: rocketchat_chat_channel
       webhook:
-        from_secret: slack_webhook_private
+        from_secret: rocketchat_chat_webhook
 
 trigger:
   ref:
@@ -297,6 +284,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 11aaff9a0aee63af1894907c5e0a945447d46cb57a5abcced48e583607df1276
+hmac: 70eca7631551a2f82a1ac54eeb1e948675423ac55513be6c48b05bf8f82a850e
 
 ...

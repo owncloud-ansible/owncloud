@@ -151,21 +151,6 @@ local PipelineDocumentation = {
         ref: ['refs/heads/main'],
       },
     },
-    {
-      name: 'trigger',
-      image: 'plugins/downstream',
-      settings: {
-        server: 'https://drone.owncloud.com',
-        token: { from_secret: 'drone_token' },
-        fork: true,
-        repositories: [
-          'owncloud-ansible/owncloud-ansible.github.io@main',
-        ],
-      },
-      when: {
-        ref: ['refs/heads/main'],
-      },
-    },
   ],
   trigger: {
     ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
@@ -187,8 +172,8 @@ local PipelineNotification = {
       name: 'notify',
       image: 'plugins/slack:1',
       settings: {
-        webhook: { from_secret: 'slack_webhook_private' },
-        channel: { from_secret: 'slack_channel' },
+        webhook: { from_secret: 'rocketchat_chat_webhook' },
+        channel: { from_secret: 'rocketchat_chat_channel' },
       },
     },
   ],
