@@ -18,10 +18,10 @@ owncloud_install_from_filesystem: False
 
 owncloud_release_channel: production
 
-# @var owncloud_enterprise_license_key:customer_date_hash: >
-# Set your enterprise license key here to use enterprise apps
+# @var owncloud_enterprise_license_key:description: >
+# Set your enterprise license key here to use enterprise apps.
 # @end
-# owncloud_enterprise_license_key: #
+# @var owncloud_enterprise_license_key:value: $ "_unset_"
 
 # @var owncloud_apt_cache_update:description: >
 # Automatically update apt cache on package installations.
